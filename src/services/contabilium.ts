@@ -1,11 +1,11 @@
 /**
  * Contabilium API service — SERVER SIDE ONLY
  *
- * Authentication flow (reverse-engineered from official WooCommerce plugin):
- *   1. POST https://wp.contabilium.com/token
+ * Authentication flow:
+ *   1. POST https://rest.contabilium.com/token
  *      body: grant_type=client_credentials&client_id={email}&client_secret={api_key}
  *      → { access_token: "..." }
- *   2. GET  https://rest.contabilium.com/{endpoint}
+ *   2. GET  https://rest.contabilium.com/api/{endpoint}
  *      header: Authorization: Bearer {access_token}
  *
  * Env vars required (.env.local):
@@ -15,9 +15,11 @@
  * Never import this file in client components.
  */
 
-// ─── Base URLs (from official WooCommerce plugin ContabiliumRoutes.php) ────────
-const TOKEN_URL = 'https://wp.contabilium.com/token'
-const REST_BASE = 'https://rest.contabilium.com'
+// ─── Base URLs ─────────────────────────────────────────────────────────────────
+const TOKEN_URL = 'https://rest.contabilium.com/token'
+const REST_BASE = 'https://rest.contabilium.com/api'
+// Safety cap for the paginated product listing
+const MAX_PAGES = 50
 
 // ─── In-memory token cache ─────────────────────────────────────────────────────
 // Next.js server processes stay alive between requests, so this persists for the
@@ -35,7 +37,22 @@ export interface ContabiliumConcepto {
   Precio: number       // Price WITHOUT tax (IVA)
   PrecioFinal: number  // Price WITH tax (IVA) — show this to customers
   Stock: number
-  Activo: boolean
+  Estado?: string      // "Activo" | "Inactivo"
+  Tipo?: string        // "Producto" | "Servicio" | "Combo"
+  IdRubro?: number | string | null
+  IdSubrubro?: number | string | null
+  CodigoBarras?: string | null
+  Observaciones?: string | null
+}
+
+export interface ContabiliumRubro {
+  Id: number
+  Nombre: string
+}
+
+interface ConceptosPage {
+  Items?: ContabiliumConcepto[]
+  TotalItems?: number
 }
 
 // ─── Auth ──────────────────────────────────────────────────────────────────────
@@ -70,7 +87,8 @@ async function getAccessToken(): Promise<string> {
       client_id:     clientId,
       client_secret: clientSecret,
     }),
-    cache: 'no-store',
+    // Con 'no-store' las páginas dejarían de generarse por adelantado; el token dura 24 h
+    next: { revalidate: 3600 },
   })
 
   if (!res.ok) {
@@ -112,26 +130,42 @@ async function restGet<T>(path: string): Promise<T> {
   return res.json() as Promise<T>
 }
 
+/** SKUs are compared ignoring case and surrounding spaces */
+export function normalizeSku(sku: string | null | undefined): string {
+  return (sku ?? '').trim().toUpperCase()
+}
+
+export function isContabiliumConfigured(): boolean {
+  return !!(process.env.CONTABILIUM_CLIENT_ID && process.env.CONTABILIUM_CLIENT_SECRET)
+}
+
 // ─── Public API ────────────────────────────────────────────────────────────────
 
 export const ContabiliumService = {
-  /** All active conceptos (products) */
+  /** All conceptos (products), walking every page of /conceptos/search */
   async getConceptos(): Promise<ContabiliumConcepto[]> {
-    const data = await restGet<ContabiliumConcepto[] | { Items?: ContabiliumConcepto[] }>('/conceptos')
-    // Some Contabilium plans return a paginated wrapper { Items: [...], Total: N }
-    return Array.isArray(data) ? data : (data.Items ?? [])
+    const all: ContabiliumConcepto[] = []
+    for (let page = 1; page <= MAX_PAGES; page++) {
+      const data = await restGet<ConceptosPage | ContabiliumConcepto[]>(`/conceptos/search?page=${page}&pageSize=50`)
+      if (Array.isArray(data)) return data
+      const items = data.Items ?? []
+      all.push(...items)
+      // TotalPage viene con la cantidad de la página, no de páginas: se corta por TotalItems
+      if (items.length === 0 || all.length >= (data.TotalItems ?? all.length)) break
+    }
+    return all
+  },
+
+  /** Rubros (categorías) cargados en Contabilium */
+  async getRubros(): Promise<ContabiliumRubro[]> {
+    const data = await restGet<ContabiliumRubro[] | { Items?: ContabiliumRubro[] }>('/conceptos/rubros')
+    return Array.isArray(data) ? data : data.Items ?? []
   },
 
   /** Find one concepto by SKU (Codigo) */
   async getByCodigo(sku: string): Promise<ContabiliumConcepto | null> {
-    try {
-      // Try direct endpoint first (faster)
-      return await restGet<ContabiliumConcepto>(`/conceptos?codigo=${encodeURIComponent(sku)}`)
-    } catch {
-      // Fallback: fetch all and filter
-      const all = await this.getConceptos()
-      return all.find(c => c.Codigo === sku) ?? null
-    }
+    const all = await this.getConceptos()
+    return all.find(c => normalizeSku(c.Codigo) === normalizeSku(sku)) ?? null
   },
 
   /** Current stock for a SKU */

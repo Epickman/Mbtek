@@ -1,39 +1,37 @@
 import Link from 'next/link'
 import { getLiveProducts } from '@/services/liveProducts'
-import { getProductStats, rankProducts } from '@/services/productStats'
-import ProductCard from '@/components/ProductCard/ProductCard'
+import ProductCarousel from './ProductCarousel'
+import Reveal from '@/components/ui/Reveal'
 
-// 5 entran justo en la grilla: el primero ocupa dos columnas.
-const SLOTS = 5
+// Suficientes para que una vuelta del carrusel sea más ancha que la pantalla
+const SLOTS = 14
 
 export default async function FeaturedProducts() {
-  const [products, stats] = await Promise.all([getLiveProducts(), getProductStats()])
-  const featured = rankProducts(products, stats, SLOTS)
+  // Solo los que tienen stock en Contabilium
+  const featured = (await getLiveProducts()).filter((p) => (p.stock ?? 0) > 0).slice(0, SLOTS)
+  if (featured.length === 0) return null
 
   return (
-    <section className="bg-[var(--black)] py-[clamp(56px,9vw,110px)] px-4" aria-labelledby="featured-heading">
-      <div className="max-w-screen-xl mx-auto">
+    <section className="bg-[var(--black)] py-[clamp(56px,9vw,110px)]" aria-labelledby="featured-heading">
+      <div className="max-w-screen-xl mx-auto px-4">
         {/* Editorial header */}
-        <div className="mb-[clamp(30px,5vw,54px)] text-center">
-          <div className="mb-eyebrow"><span>Lo más pedido</span></div>
+        <Reveal className="mb-[clamp(30px,5vw,54px)] text-center">
+          <div className="mb-eyebrow"><span>Destacados</span></div>
           <h2 id="featured-heading" className="mb-title">
-            Más vendidos y <span className="accent">consultados</span>
+            Productos <span className="accent">en stock</span>
           </h2>
-        </div>
+        </Reveal>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {featured.map((product, i) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              size={i === 0 ? 'large' : 'default'}
-            />
-          ))}
-        </div>
+      </div>
 
+      {/* Carrusel a todo el ancho: se mueve solo, se arrastra y cada tarjeta lleva al producto */}
+      <Reveal>
+        <ProductCarousel products={featured} />
+      </Reveal>
+
+      <div className="max-w-screen-xl mx-auto px-4">
         <div className="mt-[clamp(30px,5vw,48px)] flex justify-center">
-          <Link href="/productos" className="mb-btn mb-btn-outline">
+          <Link href="/tienda" className="mb-btn mb-btn-outline">
             Ver todos los productos
           </Link>
         </div>

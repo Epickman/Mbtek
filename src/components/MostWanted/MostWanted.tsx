@@ -1,15 +1,16 @@
 'use client'
 
 import Image from 'next/image'
+import Reveal from '@/components/ui/Reveal'
 import { useRouter } from 'next/navigation'
 
 const models = [
-  { model: 'YFZ450R', img: '/models/yfz450r.jpg' },
-  { model: 'YFZ450F', img: '/models/yfz450f.jpg' },
-  { model: 'Raptor 700', img: '/models/raptor700.jpg' },
-  { model: 'Raptor 350', img: '/models/raptor350.jpg' },
-  { model: 'Raptor 125 / 250', img: '/models/raptor125-250.jpg' },
-  { model: 'Banshee 350', label: 'Banshee', img: '/models/banshee.jpg' },
+  { model: 'YFZ450R', img: '/models/yfz450r.jpeg' },
+  { model: 'YFZ450F', img: '/models/yfz450f.jpeg' },
+  { model: 'Raptor 700', img: '/models/raptor700.jpeg' },
+  { model: 'Raptor 350', img: '/models/raptor350.jpeg' },
+  { model: 'Raptor 125 / 250', img: '/models/raptor125-250.jpeg' },
+  { model: 'Banshee 350', label: 'Banshee', img: '/models/banshee.jpeg' },
 ]
 
 export default function MostWanted() {
@@ -33,36 +34,37 @@ export default function MostWanted() {
       />
 
       <div className="relative z-[1] mx-auto max-w-[1240px] px-6">
-        <div className="mb-[clamp(30px,5vw,54px)] text-center">
+        <Reveal className="mb-[clamp(30px,5vw,54px)] text-center">
           <div className="mb-eyebrow"><span>Los preferidos</span></div>
           <h2 id="most-wanted-heading" className="mb-title">
             Cuatriciclos <span className="accent">más buscados</span>
           </h2>
-        </div>
+        </Reveal>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
-          {models.map((m) => (
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+          {models.map((m, i) => (
+            <Reveal key={m.model} delay={(i % 6) * 0.07}>
             <button
-              key={m.model}
               type="button"
               onClick={pick}
-              className="group flex flex-col items-center text-center"
+              className="group flex w-full flex-col items-center text-center"
               aria-label={`Ver repuestos para Yamaha ${m.label ?? m.model}`}
             >
-              <div className="relative mb-3 aspect-[4/3] w-full overflow-hidden rounded-[3px] border border-white/10 transition-all duration-300 group-hover:-translate-y-1 group-hover:border-[var(--accent)]/50">
+              <div className="relative mb-4 aspect-[4/3] w-full overflow-hidden rounded-[3px] border border-white/10 transition-all duration-300 group-hover:-translate-y-1 group-hover:border-[var(--accent)]/50">
                 <Image
                   src={m.img}
                   alt={`Yamaha ${m.label ?? m.model}`}
                   fill
-                  sizes="(min-width: 1024px) 16vw, (min-width: 640px) 33vw, 50vw"
+                  sizes="(min-width: 1240px) 400px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   className="object-cover saturate-[0.9] transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
-              <span className="font-display text-[11px] uppercase tracking-[2px] text-[var(--accent)]">Yamaha</span>
-              <span className="mt-0.5 text-[13px] font-medium tracking-[0.5px] text-[var(--chrome-2)]">
+              <span className="font-display text-[0.75rem] uppercase tracking-[2px] text-[var(--accent)]">Yamaha</span>
+              <span className="mt-1 text-[1rem] font-medium tracking-[0.5px] text-[var(--chrome-2)]">
                 {m.label ?? m.model}
               </span>
             </button>
+            </Reveal>
           ))}
         </div>
       </div>

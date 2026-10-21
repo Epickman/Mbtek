@@ -1,12 +1,9 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
-import { MessageCircle, Plus } from 'lucide-react'
-import { useCart } from '@/store/cartStore'
-import { generateWhatsAppUrl } from '@/utils/whatsapp'
-import { trackProducts } from '@/utils/trackProducts'
+import ProductActions from './ProductActions'
 import { formatPrice, formatStock } from '@/utils/formatPrice'
+import { getCategoryById } from '@/data/categories'
 import type { Product } from '@/types'
 import { cn } from '@/utils/cn'
 
@@ -17,18 +14,8 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, className, size = 'default' }: ProductCardProps) {
-  const { addItem, state } = useCart()
-  const isInCart = state.items.some((i) => i.product.id === product.id)
-
-  const waUrl = generateWhatsAppUrl({
-    product,
-    url: `${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/productos/${product.slug}`,
-  })
-
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault()
-    addItem(product)
-  }
+  const small = size === 'small'
+  const category = getCategoryById(product.category)
 
   return (
     <article
@@ -39,70 +26,51 @@ export default function ProductCard({ product, className, size = 'default' }: Pr
         className
       )}
     >
-      <Link href={`/productos/${product.slug}`} className="block" aria-label={`Ver ${product.name}`}>
-        {/* Image */}
-        <div className={cn('relative overflow-hidden bg-zinc-800', size === 'large' ? 'aspect-[16/9]' : 'aspect-square')}>
-          <Image
-            src={product.images[0] ?? '/images/placeholder-product.jpg'}
-            alt={product.name}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
-
-          {/* Terrain badges */}
-          <div className="absolute top-3 left-3 flex gap-1.5">
-            {product.terrain.map((t) => (
-              <span
-                key={t}
-                className="text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full bg-black/60 text-zinc-300 backdrop-blur-sm"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-
-          {/* Quick add overlay */}
-          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-            <button
-              onClick={handleAddToCart}
-              className={cn(
-                'flex items-center gap-2 py-2.5 px-5 rounded-full text-sm font-bold tracking-wide transition-all',
-                isInCart
-                  ? 'bg-[var(--accent)] text-black'
-                  : 'bg-white text-black hover:bg-[var(--accent)]'
-              )}
-              aria-label={isInCart ? 'Ya está en el carrito' : 'Agregar al carrito'}
-            >
-              <Plus size={14} />
-              {isInCart ? 'Agregado' : 'Agregar'}
-            </button>
-          </div>
-        </div>
-
+      <Link href={`/productos/${product.slug}`} className="flex flex-1 flex-col" aria-label={`Ver ${product.name}`}>
         {/* Info */}
-        <div className="p-4 flex flex-col gap-2 flex-1">
-          <span className="text-[10px] tracking-[0.2em] text-zinc-500 uppercase">{product.sku}</span>
-          <h3 className="text-white font-semibold text-sm leading-snug group-hover:text-[var(--accent)] transition-colors">
+        <div className={cn('flex flex-col flex-1', small ? 'p-3 gap-1' : 'p-4 gap-2')}>
+          {category && (
+            <span
+              className={cn(
+                'self-start rounded-full border border-zinc-700 px-2.5 py-0.5 font-medium uppercase tracking-[0.15em] text-zinc-300',
+                small ? 'mb-1 text-[0.5625rem]' : 'mb-1.5 text-[0.625rem]'
+              )}
+            >
+              {category.name}
+            </span>
+          )}
+          <span className={cn('tracking-[0.2em] text-zinc-500 uppercase', small ? 'text-[0.625rem]' : 'text-xs')}>{product.sku}</span>
+          <h3
+            className={cn(
+              'text-white font-semibold leading-snug group-hover:text-[var(--accent)] transition-colors',
+              small ? 'text-sm line-clamp-2' : 'text-lg'
+            )}
+          >
             {product.name}
           </h3>
 
+          {product.description && (
+            <p className={cn('text-zinc-400 leading-relaxed', small ? 'text-xs line-clamp-2' : 'text-sm line-clamp-3')}>
+              {product.description}
+            </p>
+          )}
+
           {/* Vehicle compatibility */}
           {product.vehicles.length > 0 && (
-            <p className="text-zinc-500 text-xs truncate">
+            <p className={cn('text-zinc-500 truncate', small ? 'text-xs' : 'text-sm')}>
               {product.vehicles.slice(0, 2).join(' · ')}
               {product.vehicles.length > 2 && ` +${product.vehicles.length - 2}`}
             </p>
           )}
 
-          <div className="flex items-center justify-between mt-auto pt-3">
-            <span className="text-white font-bold text-sm">
+          <div className={cn('flex items-center justify-between mt-auto', small ? 'pt-2' : 'pt-3')}>
+            <span className={cn('text-white font-bold', small ? 'text-base' : 'text-xl')}>
               {formatPrice(product.price)}
             </span>
             {product.stock !== undefined && (
               <span
                 className={cn(
-                  'text-[10px] font-medium',
+                  'text-xs font-medium',
                   product.stock === 0 ? 'text-red-400' : product.stock <= 3 ? 'text-amber-400' : 'text-green-400'
                 )}
               >
@@ -113,35 +81,7 @@ export default function ProductCard({ product, className, size = 'default' }: Pr
         </div>
       </Link>
 
-      {/* Action row */}
-      <div className="px-4 pb-4 flex gap-2">
-        <button
-          onClick={handleAddToCart}
-          className={cn(
-            'flex-1 py-2.5 rounded-xl text-xs font-bold tracking-wide uppercase transition-all',
-            isInCart
-              ? 'bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/40'
-              : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700 border border-zinc-700'
-          )}
-          aria-label={isInCart ? 'Ya está en el carrito' : 'Agregar al carrito'}
-        >
-          {isInCart ? '✓ En el carrito' : '+ Agregar'}
-        </button>
-        <a
-          href={waUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1.5 py-2.5 px-3 rounded-xl bg-[var(--accent)] text-black text-xs font-bold hover:bg-[var(--accent-hover)] transition-all"
-          aria-label="Comprar por WhatsApp"
-          onClick={(e) => {
-            e.stopPropagation()
-            trackProducts('order', [product.id])
-          }}
-        >
-          <MessageCircle size={13} />
-          <span className="hidden sm:inline">WhatsApp</span>
-        </a>
-      </div>
+      <ProductActions product={product} className={small ? 'px-3 pb-3' : 'px-4 pb-4'} />
     </article>
   )
 }

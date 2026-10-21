@@ -2,9 +2,8 @@
 
 import { createContext, useContext, type ReactNode } from 'react'
 import type { Product } from '@/types'
-import { products as localProducts } from '@/data/products'
 
-const ProductsContext = createContext<Product[]>(localProducts)
+const ProductsContext = createContext<Product[]>([])
 
 export function ProductsProvider({ products, children }: { products: Product[]; children: ReactNode }) {
   return <ProductsContext.Provider value={products}>{children}</ProductsContext.Provider>

@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import Link from 'next/link'
-import { MessageCircle, ArrowLeft, Package, Tag, Truck } from 'lucide-react'
+import { ChevronRight, Package, Tag } from 'lucide-react'
 import { getLiveProducts, getLiveBySlug } from '@/services/liveProducts'
 import { formatPrice, formatStock } from '@/utils/formatPrice'
+import { getCategoryById } from '@/data/categories'
 import ProductDetailClient from './ProductDetailClient'
+import ShareButton from './ShareButton'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -31,6 +32,8 @@ export default async function ProductDetailPage({ params }: Props) {
   const product = await getLiveBySlug(slug)
   if (!product) notFound()
 
+  const category = getCategoryById(product.category)
+
   const related = (await getLiveProducts())
     .filter((p) => p.category === product.category)
     .filter((p) => p.id !== product.id)
@@ -41,40 +44,39 @@ export default async function ProductDetailPage({ params }: Props) {
       <div className="max-w-screen-xl mx-auto px-4 py-12">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mb-8">
-          <Link
-            href="/productos"
-            className="inline-flex items-center gap-2 text-zinc-500 hover:text-white text-sm transition-colors"
-          >
-            <ArrowLeft size={14} />
-            Volver al catálogo
-          </Link>
+          <ol className="flex flex-wrap items-center gap-1.5 text-sm text-zinc-500">
+            <li>
+              <Link href="/tienda" className="transition-colors hover:text-white">
+                Tienda
+              </Link>
+            </li>
+            {category && (
+              <li className="flex items-center gap-1.5">
+                <ChevronRight size={14} aria-hidden="true" />
+                <Link href={`/tienda?categoria=${category.id}`} className="transition-colors hover:text-white">
+                  {category.name}
+                </Link>
+              </li>
+            )}
+            <li className="flex min-w-0 items-center gap-1.5">
+              <ChevronRight size={14} aria-hidden="true" />
+              <span aria-current="page" className="truncate text-zinc-300">
+                {product.name}
+              </span>
+            </li>
+          </ol>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Image */}
-          <div className="relative aspect-square bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800">
-            <Image
-              src={product.images[0] ?? '/images/placeholder-product.jpg'}
-              alt={product.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              priority
-            />
-          </div>
-
-          {/* Info */}
+        <div className="max-w-3xl">
           <div className="flex flex-col gap-6">
             <div>
-              <div className="flex gap-2 mb-3">
-                {product.terrain.map((t) => (
-                  <span
-                    key={t}
-                    className="text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700"
-                  >
-                    {t}
+              <div className="mb-4 flex items-center justify-between gap-4">
+                {category ? (
+                  <span className="inline-block rounded-full border border-zinc-700 px-3 py-1 text-xs font-medium uppercase tracking-[0.15em] text-zinc-300">
+                    {category.name}
                   </span>
-                ))}
+                ) : <span />}
+                <ShareButton title={product.name} path={`/productos/${product.slug}`} />
               </div>
               <h1 className="text-white text-2xl sm:text-4xl font-black tracking-tight uppercase leading-tight">
                 {product.name}
@@ -125,7 +127,7 @@ export default async function ProductDetailPage({ params }: Props) {
             </div>
 
             {/* Description */}
-            <p className="text-zinc-400 text-sm leading-relaxed">{product.description}</p>
+            <p className="text-zinc-300 text-base leading-relaxed">{product.description}</p>
 
             {/* Specs */}
             {product.specs && Object.keys(product.specs).length > 0 && (
@@ -160,19 +162,11 @@ export default async function ProductDetailPage({ params }: Props) {
                   href={`/productos/${p.slug}`}
                   className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 hover:border-zinc-600 transition-all group"
                 >
-                  <div className="relative aspect-square bg-zinc-800 rounded-xl overflow-hidden mb-4">
-                    <Image
-                      src={p.images[0] ?? '/images/placeholder-product.jpg'}
-                      alt={p.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 640px) 100vw, 33vw"
-                    />
-                  </div>
                   <p className="text-zinc-500 text-xs mb-1">{p.sku}</p>
                   <h3 className="text-white text-sm font-semibold group-hover:text-[var(--accent)] transition-colors">
                     {p.name}
                   </h3>
+                  {p.description && <p className="mt-2 line-clamp-2 text-xs text-zinc-400">{p.description}</p>}
                   <p className="text-white font-bold text-sm mt-2">{formatPrice(p.price)}</p>
                 </Link>
               ))}

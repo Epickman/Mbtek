@@ -23,6 +23,11 @@ type Action =
 
 // ── State / Reducer ───────────────────────────────────────────────────────────
 
+/** Tope de unidades que se pueden pedir de un producto (sin stock informado no hay tope) */
+export function maxQty(product: Product): number {
+  return product.stock ?? Infinity
+}
+
 const initialState: CartState = {
   items: [],
 }
@@ -30,20 +35,24 @@ const initialState: CartState = {
 function reducer(state: CartState, action: Action): CartState {
   switch (action.type) {
     case 'ADD_ITEM': {
+      if (maxQty(action.product) <= 0) return state
       const existing = state.items.find((i) => i.product.id === action.product.id)
       if (existing) {
         return {
           ...state,
           items: state.items.map((i) =>
             i.product.id === action.product.id
-              ? { ...i, quantity: i.quantity + (action.quantity ?? 1) }
+              ? { ...i, quantity: Math.min(i.quantity + (action.quantity ?? 1), maxQty(action.product)) }
               : i
           ),
         }
       }
       return {
         ...state,
-        items: [...state.items, { product: action.product, quantity: action.quantity ?? 1 }],
+        items: [
+          ...state.items,
+          { product: action.product, quantity: Math.min(action.quantity ?? 1, maxQty(action.product)) },
+        ],
       }
     }
 
@@ -54,7 +63,9 @@ function reducer(state: CartState, action: Action): CartState {
       return {
         ...state,
         items: state.items.map((i) =>
-          i.product.id === action.productId ? { ...i, quantity: action.quantity } : i
+          i.product.id === action.productId
+            ? { ...i, quantity: Math.max(1, action.quantity) }
+            : i
         ),
       }
 
@@ -83,6 +94,9 @@ type CartContextValue = {
   isOpen: boolean
   openCart: () => void
   closeCart: () => void
+  /** Último producto agregado, para el aviso de confirmación (null cuando no hay aviso) */
+  lastAdded: { product: Product; quantity: number; key: number } | null
+  dismissAdded: () => void
 }
 
 const CartContext = createContext<CartContextValue | null>(null)
@@ -94,6 +108,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false)
   const openCart = useCallback(() => setIsOpen(true), [])
   const closeCart = useCallback(() => setIsOpen(false), [])
+  const [lastAdded, setLastAdded] = useState<CartContextValue['lastAdded']>(null)
+  const dismissAdded = useCallback(() => setLastAdded(null), [])
 
   // El primer render tiene que coincidir con el del servidor (carrito vacío);
   // lo guardado en localStorage se carga recién después de montar.
@@ -135,15 +151,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const value: CartContextValue = {
     state: freshState,
-    addItem: (product, quantity) => dispatch({ type: 'ADD_ITEM', product, quantity }),
+    addItem: (product, quantity = 1) => {
+      if (maxQty(product) <= 0) return
+      dispatch({ type: 'ADD_ITEM', product, quantity })
+      setLastAdded({ product, quantity, key: Date.now() })
+    },
     removeItem: (productId) => dispatch({ type: 'REMOVE_ITEM', productId }),
-    updateQty: (productId, quantity) => dispatch({ type: 'UPDATE_QTY', productId, quantity }),
+    updateQty: (productId, quantity) => {
+      // El tope sale del catálogo actualizado, no de la copia guardada en el carrito
+      const item = freshState.items.find((i) => i.product.id === productId)
+      const capped = item ? Math.min(quantity, maxQty(item.product)) : quantity
+      dispatch({ type: 'UPDATE_QTY', productId, quantity: capped })
+    },
     clear: () => dispatch({ type: 'CLEAR' }),
     totalItems: freshState.items.reduce((sum, i) => sum + i.quantity, 0),
     subtotal: freshState.items.reduce((sum, i) => sum + (i.product.price ?? 0) * i.quantity, 0),
     isOpen,
     openCart,
     closeCart,
+    lastAdded,
+    dismissAdded,
   }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

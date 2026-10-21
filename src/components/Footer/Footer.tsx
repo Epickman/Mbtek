@@ -1,67 +1,38 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { MessageCircle } from 'lucide-react'
-import { InstagramIcon } from '@/components/ui/icons'
-import siteConfig from '@/config/site'
 
 export default function Footer() {
   const year = new Date().getFullYear()
-  const waUrl = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent('Hola MBTEK Parts 👋')}`
 
   return (
-    <footer className="bg-zinc-950 border-t border-zinc-800" role="contentinfo">
-      {/* CTA Band */}
-      <div className="bg-zinc-900 py-16 px-4 text-center">
-        <p className="text-zinc-500 text-xs tracking-[0.3em] uppercase mb-4">Contacto</p>
-        <h2 className="text-white text-3xl sm:text-5xl font-black tracking-tight uppercase mb-2">
-          ¿LISTO PARA
-        </h2>
-        <h2 className="text-[var(--accent)] text-3xl sm:text-5xl font-black tracking-tight uppercase mb-8">
-          ARMAR TU ATV?
-        </h2>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href={waUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 py-4 px-8 bg-[var(--accent)] text-white font-semibold text-sm tracking-[0.2em] uppercase rounded-sm hover:bg-[var(--accent-hover)] transition-all hover:scale-105"
-          >
-            <MessageCircle size={18} />
-            WhatsApp
-          </a>
-          <a
-            href={`https://www.instagram.com/${siteConfig.instagram}/`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 py-4 px-8 border border-zinc-600 text-white font-semibold text-sm tracking-[0.2em] uppercase rounded-full hover:border-white transition-all"
-          >
-            <InstagramIcon size={18} />
-            @{siteConfig.instagram}
-          </a>
-          <Link
-            href="/contacto"
-            className="py-4 px-8 border border-zinc-600 text-white font-semibold text-sm tracking-[0.2em] uppercase rounded-full hover:border-white transition-all"
-          >
-            Consultar
-          </Link>
-        </div>
-      </div>
+    <footer className="mt-16 bg-zinc-950" role="contentinfo">
+      {/* Separator between page content and footer */}
+      <div className="h-[3px] bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent" aria-hidden="true" />
 
       {/* Main footer */}
       <div className="max-w-screen-xl mx-auto px-4 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {/* Brand */}
         <div className="lg:col-span-2">
-          <Image
-            src="/brand/mbtek-logo.png"
-            alt="MBTEK Parts Atv & Mx"
-            width={1677}
-            height={405}
-            className="mb-4 h-12 w-auto"
-          />
+          <div className="relative mb-4 flex items-center pl-[94px]">
+            {/* Bandera de la marca, igual que en el header */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/brand-flag.png"
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute left-0 top-1/2 h-[34px] w-auto max-w-none -translate-y-1/2 opacity-[0.55] [filter:grayscale(1)_brightness(2)_blur(0.5px)] [mask-image:linear-gradient(90deg,transparent_0%,#000_55%,#000_100%)]"
+            />
+            <Image
+              src="/brand/mbtek-logo-text.png"
+              alt="MBTEK Parts Atv & Mx"
+              width={1675}
+              height={405}
+              className="relative h-12 w-auto"
+            />
+          </div>
           <p className="text-zinc-400 text-sm leading-relaxed max-w-xs">
             Repuestos, piezas y accesorios para ATV, cuatriciclos, MX y vehículos off-road.
-            Armá tu ATV según el terreno.
+            Armá tu ATV a tu medida.
           </p>
           <p className="text-zinc-500 text-xs mt-4">Argentina</p>
         </div>
@@ -71,9 +42,9 @@ export default function Footer() {
           <p className="text-zinc-500 text-xs tracking-[0.2em] uppercase mb-4">Catálogo</p>
           <ul className="space-y-3" role="list">
             {[
-              { label: 'Productos', href: '/productos' },
-              { label: 'ATV', href: '/productos?tipo=atv' },
-              { label: 'MX', href: '/productos?tipo=mx' },
+              { label: 'Productos', href: '/tienda' },
+              { label: 'ATV', href: '/tienda?tipo=atv' },
+              { label: 'MX', href: '/tienda?tipo=mx' },
               { label: 'Personalizá tu ATV / MX', href: '/personalizar' },
             ].map((link) => (
               <li key={link.href}>

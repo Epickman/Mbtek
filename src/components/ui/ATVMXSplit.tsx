@@ -10,7 +10,7 @@ const panels = [
     label: 'ATV',
     subtitle: 'Cuatriciclos',
     description: 'Repuestos y accesorios para toda la gama de ATV. Yamaha, Honda, Can-Am, Polaris y más.',
-    href: '/productos?tipo=atv',
+    href: '/tienda?tipo=atv',
     gradient: 'from-amber-900/60 via-stone-900/40 to-zinc-950',
   },
   {
@@ -18,7 +18,7 @@ const panels = [
     label: 'MX',
     subtitle: 'Motocross',
     description: 'Componentes de alto rendimiento para competición y uso recreativo en pista.',
-    href: '/productos?tipo=mx',
+    href: '/tienda?tipo=mx',
     gradient: 'from-orange-900/60 via-zinc-800/40 to-zinc-950',
   },
 ]

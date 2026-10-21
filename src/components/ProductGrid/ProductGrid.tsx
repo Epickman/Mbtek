@@ -3,13 +3,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import ProductCard from '@/components/ProductCard/ProductCard'
-import { categories, getCategoriesByTerrain } from '@/data/categories'
-import type { Product, Terrain } from '@/types'
+import { categories } from '@/data/categories'
+import type { Product } from '@/types'
 import { cn } from '@/utils/cn'
 
 interface ProductGridProps {
   products: Product[]
-  terrain?: Terrain
   showFilters?: boolean
   title?: string
   className?: string
@@ -18,7 +17,6 @@ interface ProductGridProps {
 
 export default function ProductGrid({
   products,
-  terrain,
   showFilters = false,
   title,
   className,
@@ -54,7 +52,6 @@ export default function ProductGrid({
     el?.scrollBy({ left: dir * el.clientWidth * 0.7, behavior: 'smooth' })
   }
 
-  const filterCategories = terrain ? getCategoriesByTerrain(terrain) : categories
   const filtered =
     activeCategory === 'all'
       ? products
@@ -110,7 +107,7 @@ export default function ProductGrid({
             >
               Todos
             </button>
-            {filterCategories.map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}

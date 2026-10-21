@@ -8,9 +8,20 @@ import VehicleDiagram from '@/components/VehicleDiagram/VehicleDiagram'
 import { useCart } from '@/store/cartStore'
 import { useProducts } from '@/store/productsContext'
 import { categories } from '@/data/categories'
+
+// Partes que se pueden personalizar, cada una con las categorías de productos que agrupa
+const PART_GROUPS: Record<string, string[]> = {
+  ruedas: ['ruedas', 'neumaticos', 'frenos', 'suspension'],
+  motor: ['motor', 'admision', 'embrague', 'transmision'],
+  escape: ['escape'],
+}
+const parts = categories.filter((c) => c.id in PART_GROUPS)
+/** Parte del vehículo a la que pertenece una categoría de producto (o undefined si no se personaliza) */
+const partOf = (category: string) =>
+  Object.keys(PART_GROUPS).find((part) => PART_GROUPS[part].includes(category))
 import { productFitsVehicleType } from '@/data/vehicleBrands'
 import { vehicleDiagrams, type DiagramType } from '@/data/vehicleDiagrams'
-import type { Product } from '@/types'
+import type { CartItem, Product } from '@/types'
 import { formatPrice, formatStock } from '@/utils/formatPrice'
 import { cn } from '@/utils/cn'
 
@@ -30,7 +41,7 @@ function VehicleChooser() {
     <div className="min-h-screen bg-zinc-950 pt-[120px] pb-20">
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6">
         <div className="mb-10 text-center">
-          <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.35em] text-zinc-500">MBTEK Parts</p>
+          <p className="mb-3 text-[0.625rem] font-medium uppercase tracking-[0.35em] text-zinc-500">MBTEK Parts</p>
           <h1
             className="font-black uppercase leading-[0.9] tracking-tight text-white"
             style={{ fontSize: 'clamp(2.2rem, 6vw, 4.5rem)' }}
@@ -44,7 +55,9 @@ function VehicleChooser() {
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           {Object.values(vehicleDiagrams).map((d) => {
-            const available = catalog.filter((p) => productFitsVehicleType(p, d.type)).length
+            const available = catalog.filter(
+              (p) => partOf(p.category) && productFitsVehicleType(p, d.type)
+            ).length
             return (
               <Link
                 key={d.type}
@@ -101,16 +114,17 @@ function Customizer({ type }: { type: DiagramType }) {
   const cartCounts = useMemo(() => {
     const counts: Record<string, number> = {}
     for (const item of state.items) {
-      if (!productFitsVehicleType(item.product, type)) continue
-      counts[item.product.category] = (counts[item.product.category] ?? 0) + item.quantity
+      const part = partOf(item.product.category)
+      if (!part || !productFitsVehicleType(item.product, type)) continue
+      counts[part] = (counts[part] ?? 0) + item.quantity
     }
     return counts
   }, [state.items, type])
 
-  const coveredParts = categories.filter((c) => cartCounts[c.id]).length
-  const activeCategory = categories.find((c) => c.id === active) ?? null
-  const inCart = cartItems.filter((i) => i.product.category === active)
-  const options = catalog.filter((p) => p.category === active && fits(p))
+  const coveredParts = parts.filter((c) => cartCounts[c.id]).length
+  const activeCategory = parts.find((c) => c.id === active) ?? null
+  const inCart = cartItems.filter((i) => partOf(i.product.category) === active)
+  const options = catalog.filter((p) => partOf(p.category) === active && fits(p))
 
   return (
     <div className="min-h-screen bg-zinc-950 pt-[120px] pb-20">
@@ -120,7 +134,7 @@ function Customizer({ type }: { type: DiagramType }) {
           <div>
             <Link
               href="/personalizar"
-              className="mb-3 inline-flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.3em] text-zinc-500 transition-colors hover:text-white"
+              className="mb-3 inline-flex items-center gap-1.5 text-[0.625rem] font-medium uppercase tracking-[0.3em] text-zinc-500 transition-colors hover:text-white"
             >
               <ArrowLeft size={12} /> Cambiar vehículo
             </Link>
@@ -154,10 +168,10 @@ function Customizer({ type }: { type: DiagramType }) {
 
           <div className="flex items-center gap-4 rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-3">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500">Partes cubiertas</p>
+              <p className="text-[0.625rem] uppercase tracking-[0.2em] text-zinc-500">Partes cubiertas</p>
               <p className="text-lg font-black text-white">
                 {coveredParts}
-                <span className="text-zinc-500"> / {categories.length}</span>
+                <span className="text-zinc-500"> / {parts.length}</span>
               </p>
             </div>
             <button
@@ -175,7 +189,7 @@ function Customizer({ type }: { type: DiagramType }) {
           <div className="rounded-2xl border border-zinc-800 bg-gradient-to-b from-zinc-900 to-zinc-950 p-4 sm:p-6 lg:sticky lg:top-[120px] lg:self-start">
             <VehicleDiagram
               diagram={diagram}
-              categories={categories}
+              categories={parts}
               activeCategory={active}
               onCategorySelect={setActive}
               cartCounts={cartCounts}
@@ -183,7 +197,7 @@ function Customizer({ type }: { type: DiagramType }) {
 
             {/* Parts as chips — same info as the diagram, easier on small screens */}
             <ul className="mt-5 flex flex-wrap justify-center gap-2" aria-label={`Partes del ${diagram.name}`}>
-              {categories.map((cat) => {
+              {parts.map((cat) => {
                 const count = cartCounts[cat.id] ?? 0
                 return (
                   <li key={cat.id}>
@@ -201,7 +215,7 @@ function Customizer({ type }: { type: DiagramType }) {
                   >
                     {count > 0 && <Check size={12} />}
                     {cat.name}
-                    {count > 0 && <span className="text-[10px] opacity-80">×{count}</span>}
+                    {count > 0 && <span className="text-[0.625rem] opacity-80">×{count}</span>}
                   </button>
                   </li>
                 )
@@ -212,10 +226,20 @@ function Customizer({ type }: { type: DiagramType }) {
           {/* ── Part panel ──────────────────────────────────────────────────── */}
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 sm:p-6">
             {!activeCategory ? (
-              <PartsSummary name={diagram.name} cartCounts={cartCounts} onSelect={setActive} />
+              <PartsSummary
+                name={diagram.name}
+                cartItems={cartItems}
+                onSelect={setActive}
+              />
             ) : (
               <div className="animate-fade-in" key={activeCategory.id}>
-                <p className="text-[10px] uppercase tracking-[0.25em] text-zinc-500">Parte seleccionada</p>
+                <button
+                  onClick={() => setActive(null)}
+                  className="mb-4 inline-flex items-center gap-1.5 text-xs text-zinc-400 transition-colors hover:text-white"
+                >
+                  <ArrowLeft size={13} /> Ver resumen de tu {diagram.name}
+                </button>
+                <p className="text-[0.625rem] uppercase tracking-[0.25em] text-zinc-500">Parte seleccionada</p>
                 <h2 className="mt-1 text-2xl font-black uppercase tracking-tight text-white">
                   {activeCategory.name}
                 </h2>
@@ -236,15 +260,6 @@ function Customizer({ type }: { type: DiagramType }) {
                           key={item.product.id}
                           className="flex items-center gap-3 rounded-xl border border-green-500/30 bg-green-500/5 p-2.5"
                         >
-                          <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-zinc-800">
-                            <Image
-                              src={item.product.images[0] ?? '/images/placeholder-product.jpg'}
-                              alt={item.product.name}
-                              fill
-                              className="object-cover"
-                              sizes="56px"
-                            />
-                          </div>
                           <div className="min-w-0 flex-1">
                             <Link
                               href={`/productos/${item.product.slug}`}
@@ -300,19 +315,10 @@ function Customizer({ type }: { type: DiagramType }) {
                             key={product.id}
                             className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 p-2.5"
                           >
-                            <Link
-                              href={`/productos/${product.slug}`}
-                              className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-zinc-800"
-                            >
-                              <Image
-                                src={product.images[0] ?? '/images/placeholder-product.jpg'}
-                                alt={product.name}
-                                fill
-                                className="object-cover"
-                                sizes="56px"
-                              />
-                            </Link>
                             <div className="min-w-0 flex-1">
+                              <p className="text-[0.625rem] uppercase tracking-[0.15em] text-zinc-500">
+                                {categories.find((c) => c.id === product.category)?.name ?? product.category}
+                              </p>
                               <Link
                                 href={`/productos/${product.slug}`}
                                 className="line-clamp-2 text-sm font-semibold leading-tight text-white hover:text-[var(--accent)]"
@@ -329,14 +335,19 @@ function Customizer({ type }: { type: DiagramType }) {
                               </p>
                             </div>
                             <button
-                              onClick={() => addItem(product)}
+                              onClick={() => {
+                                if (!added) addItem(product)
+                              }}
+                              disabled={added || product.stock === 0}
                               className={cn(
                                 'flex flex-shrink-0 items-center gap-1 rounded-lg border px-3 py-2 text-xs font-bold uppercase transition-colors',
                                 added
-                                  ? 'border-green-500/40 bg-green-500/10 text-green-300'
+                                  ? 'cursor-default border-green-500/40 bg-green-500/10 text-green-300'
+                                  : product.stock === 0
+                                  ? 'cursor-not-allowed border-zinc-800 bg-zinc-900 text-zinc-600'
                                   : 'border-zinc-700 bg-zinc-800 text-zinc-200 hover:border-[var(--accent)] hover:text-white'
                               )}
-                              aria-label={added ? `Sumar otro ${product.name}` : `Agregar ${product.name}`}
+                              aria-label={added ? `${product.name} ya está en el carrito` : `Agregar ${product.name}`}
                             >
                               {added ? <Check size={12} /> : <Plus size={12} />}
                               {added ? 'Agregado' : 'Agregar'}
@@ -356,42 +367,104 @@ function Customizer({ type }: { type: DiagramType }) {
   )
 }
 
-/** Panel inicial: resumen de qué partes ya tienen componente en el carrito */
+/** Panel inicial: arriba lo que ya tiene puesto el vehículo, abajo las que se pueden agregar */
 function PartsSummary({
   name,
-  cartCounts,
+  cartItems,
   onSelect,
 }: {
   name: string
-  cartCounts: Record<string, number>
+  cartItems: CartItem[]
   onSelect: (id: string) => void
 }) {
+  const { removeItem } = useCart()
+  // Las partes en el orden del catálogo, cada una con sus productos del carrito
+  const installed = parts
+    .map((cat) => ({ cat, items: cartItems.filter((i) => partOf(i.product.category) === cat.id) }))
+    .filter((p) => p.items.length > 0)
+  const missing = parts.filter((cat) => !cartItems.some((i) => partOf(i.product.category) === cat.id))
+
   return (
     <div>
       <h2 className="text-xl font-black uppercase tracking-tight text-white">Tu {name}</h2>
-      <p className="mt-1 text-sm text-zinc-400">Elegí una parte en el diagrama o en la lista.</p>
-      <ul className="mt-5 divide-y divide-zinc-800">
-        {categories.map((cat) => {
-          const count = cartCounts[cat.id] ?? 0
-          return (
-            <li key={cat.id}>
-              <button
-                onClick={() => onSelect(cat.id)}
-                className="flex w-full items-center justify-between py-3 text-left text-sm transition-colors hover:text-white"
-              >
-                <span className={count > 0 ? 'text-white' : 'text-zinc-400'}>{cat.name}</span>
-                {count > 0 ? (
-                  <span className="flex items-center gap-1 text-xs font-semibold text-green-400">
-                    <Check size={13} /> {count} en el carrito
-                  </span>
-                ) : (
-                  <span className="text-xs text-zinc-600">Sin componente →</span>
-                )}
-              </button>
-            </li>
-          )
-        })}
-      </ul>
+      <p className="mt-1 text-sm text-zinc-400">Tocá una parte para cambiarla o sumarle un componente.</p>
+
+      {/* Lo que ya tiene puesto */}
+      <section className="mt-6" aria-labelledby="puesto">
+        <h3
+          id="puesto"
+          className="mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.15em] text-green-400"
+        >
+          <span className="flex items-center gap-1.5">
+            <Check size={13} /> Ya tenés puesto
+          </span>
+          <span className="text-zinc-500">{installed.length}</span>
+        </h3>
+        {installed.length === 0 ? (
+          <p className="rounded-xl border border-dashed border-zinc-700 px-4 py-4 text-sm text-zinc-500">
+            Todavía no agregaste nada. Empezá por alguna parte de la lista de abajo.
+          </p>
+        ) : (
+          <ul className="space-y-2">
+            {installed.map(({ cat, items }) => (
+              <li key={cat.id} className="rounded-xl border border-green-500/30 bg-green-500/5 p-2.5">
+                <button
+                  onClick={() => onSelect(cat.id)}
+                  className="mb-1.5 flex w-full items-center justify-between px-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-zinc-500 transition-colors hover:text-white"
+                >
+                  {cat.name}
+                  <span className="normal-case tracking-normal text-zinc-500">Cambiar →</span>
+                </button>
+                <ul className="space-y-1.5">
+                  {items.map((item) => (
+                    <li key={item.product.id} className="flex items-center gap-3">
+                      <p className="line-clamp-2 min-w-0 flex-1 text-sm font-semibold leading-tight text-white">
+                        {item.product.name}
+                      </p>
+                      {item.quantity > 1 && (
+                        <span className="flex-shrink-0 text-xs text-zinc-400">×{item.quantity}</span>
+                      )}
+                      <button
+                        onClick={() => removeItem(item.product.id)}
+                        className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-red-400"
+                        aria-label={`Quitar ${item.product.name}`}
+                        title="Quitar"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {/* Lo que se puede agregar */}
+      {missing.length > 0 && (
+        <section className="mt-7" aria-labelledby="falta">
+          <h3
+            id="falta"
+            className="mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.15em] text-zinc-400"
+          >
+            <span>Podés agregar</span>
+            <span className="text-zinc-500">{missing.length}</span>
+          </h3>
+          <ul className="divide-y divide-zinc-800 rounded-xl border border-zinc-800">
+            {missing.map((cat) => (
+              <li key={cat.id}>
+                <button
+                  onClick={() => onSelect(cat.id)}
+                  className="w-full px-4 py-3 text-left text-sm text-zinc-300 transition-colors hover:bg-zinc-800/50 hover:text-white"
+                >
+                  {cat.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   )
 }

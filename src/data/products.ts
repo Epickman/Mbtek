@@ -10,9 +10,7 @@ export const products: Product[] = [
     slug: 'amortiguadores-delanteros-stage-5',
     sku: 'SUSP-001',
     category: 'suspension',
-    terrain: ['tierra', 'arena'],
     vehicles: ['yamaha-raptor-700', 'yamaha-yfz450r'],
-    images: ['/images/placeholder-product.jpg'],
     price: undefined, // Set when available
     stock: undefined,
     description:
@@ -31,13 +29,11 @@ export const products: Product[] = [
     slug: 'kit-filtro-aire-high-flow',
     sku: 'ADM-001',
     category: 'admision',
-    terrain: ['tierra', 'arena'],
     vehicles: ['yamaha-yfz450r', 'yamaha-raptor-700'],
-    images: ['/images/placeholder-product.jpg'],
     price: undefined,
     stock: undefined,
     description:
-      'Kit completo de filtro de aire de alto flujo. Mayor rendimiento en condiciones de barro y arena.',
+      'Kit completo de filtro de aire de alto flujo. Mayor rendimiento en condiciones de barro y polvo.',
     featured: true,
     tags: ['admision', 'performance'],
   },
@@ -47,9 +43,7 @@ export const products: Product[] = [
     slug: 'kit-discos-resortes-embrague',
     sku: 'EMB-001',
     category: 'embrague',
-    terrain: ['tierra', 'arena'],
     vehicles: ['yamaha-yfz450r'],
-    images: ['/images/placeholder-product.jpg'],
     price: undefined,
     stock: undefined,
     description:
@@ -63,9 +57,7 @@ export const products: Product[] = [
     slug: 'escape-completo-16-serie-pro',
     sku: 'ESC-001',
     category: 'escape',
-    terrain: ['tierra', 'arena'],
     vehicles: ['yamaha-yfz450r', 'yamaha-raptor-700'],
-    images: ['/images/placeholder-product.jpg'],
     price: undefined,
     stock: undefined,
     description:
@@ -79,9 +71,7 @@ export const products: Product[] = [
     slug: 'mangueras-radiador-cv4',
     sku: 'MOT-001',
     category: 'motor',
-    terrain: ['tierra'],
     vehicles: ['yamaha-yfz450r'],
-    images: ['/images/placeholder-product.jpg'],
     price: undefined,
     stock: undefined,
     description:
@@ -95,9 +85,7 @@ export const products: Product[] = [
     slug: 'centro-embrague-billet',
     sku: 'EMB-002',
     category: 'embrague',
-    terrain: ['tierra', 'arena'],
     vehicles: ['yamaha-yfz450r'],
-    images: ['/images/placeholder-product.jpg'],
     price: undefined,
     stock: undefined,
     description:
@@ -111,9 +99,7 @@ export const products: Product[] = [
     slug: 'parrillas-dc4-ltravel',
     sku: 'RUEDAS-001',
     category: 'ruedas',
-    terrain: ['tierra', 'arena'],
     vehicles: ['yamaha-raptor-700', 'yamaha-yfz450f'],
-    images: ['/images/placeholder-product.jpg'],
     price: undefined,
     stock: undefined,
     description:
@@ -127,9 +113,7 @@ export const products: Product[] = [
     slug: 'manija-bomba-freno',
     sku: 'FRE-001',
     category: 'frenos',
-    terrain: ['tierra', 'arena'],
     vehicles: ['yamaha-yfz450r'],
-    images: ['/images/placeholder-product.jpg'],
     price: undefined,
     stock: undefined,
     description:
@@ -143,9 +127,7 @@ export const products: Product[] = [
     slug: 'soporte-cubre-disco-trasero',
     sku: 'PROT-001',
     category: 'proteccion',
-    terrain: ['tierra'],
     vehicles: ['yamaha-raptor-700'],
-    images: ['/images/placeholder-product.jpg'],
     price: undefined,
     stock: undefined,
     description:
@@ -159,9 +141,7 @@ export const products: Product[] = [
     slug: 'ecu-programable-vortex',
     sku: 'MOT-002',
     category: 'motor',
-    terrain: ['tierra', 'arena'],
     vehicles: ['yamaha-yfz450r'],
-    images: ['/images/placeholder-product.jpg'],
     price: undefined,
     stock: undefined,
     description:
@@ -173,8 +153,6 @@ export const products: Product[] = [
 
 export const getFeaturedProducts = () => products.filter((p) => p.featured)
 export const getProductBySlug = (slug: string) => products.find((p) => p.slug === slug)
-export const getProductsByTerrain = (terrain: 'tierra' | 'arena') =>
-  products.filter((p) => p.terrain.includes(terrain))
 export const getProductsByCategory = (category: string) =>
   products.filter((p) => p.category === category)
 export const getProductsByVehicle = (vehicleId: string) =>

@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { ShoppingCart, X, MessageCircle, Minus, Plus, Trash2, ArrowRight, Wrench } from 'lucide-react'
-import { useCart } from '@/store/cartStore'
-import { generateWhatsAppUrl } from '@/utils/whatsapp'
-import { trackProducts } from '@/utils/trackProducts'
+import { ShoppingCart, X, Minus, Plus, Trash2, ArrowRight, ArrowLeft } from 'lucide-react'
+import { useCart, maxQty } from '@/store/cartStore'
+import { CheckoutDetails, OrderSent } from './CheckoutSteps'
 import { formatPrice } from '@/utils/formatPrice'
 import { cn } from '@/utils/cn'
 
@@ -14,13 +12,20 @@ import { cn } from '@/utils/cn'
 export default function Cart() {
   const { state, removeItem, updateQty, clear, totalItems, subtotal, isOpen, closeCart } = useCart()
   const [confirmingClear, setConfirmingClear] = useState(false)
+  // Pasos: carrito → datos del cliente → pedido enviado
+  const [step, setStep] = useState<'cart' | 'details' | 'sent'>('cart')
+  const [sentUrl, setSentUrl] = useState('')
 
-  // Al cerrar o abrir el carrito se descarta la confirmación pendiente
+  // Al cerrar o abrir el carrito se descarta la confirmación pendiente y se vuelve al primer paso
   const [wasOpen, setWasOpen] = useState(isOpen)
   if (wasOpen !== isOpen) {
     setWasOpen(isOpen)
     setConfirmingClear(false)
+    if (!isOpen) setStep('cart')
   }
+
+  // Sin productos no hay datos que pedir
+  const view = step === 'details' && state.items.length === 0 ? 'cart' : step
 
   // Escape cierra; el fondo no scrollea mientras el panel está abierto
   useEffect(() => {
@@ -35,7 +40,6 @@ export default function Cart() {
     }
   }, [isOpen, closeCart])
 
-  const waUrl = generateWhatsAppUrl({ items: state.items })
   const someUnpriced = state.items.some((i) => i.product.price == null)
 
   return (
@@ -65,13 +69,28 @@ export default function Cart() {
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-zinc-800 px-6 py-5">
-          <div>
-            <h2 className="text-lg font-black uppercase tracking-wide text-white">Tu carrito</h2>
-            <p className="mt-0.5 text-xs text-zinc-500">
-              {totalItems === 0
-                ? 'Sin productos'
-                : `${totalItems} producto${totalItems !== 1 ? 's' : ''}`}
-            </p>
+          <div className="flex items-center gap-3">
+            {view === 'details' && (
+              <button
+                onClick={() => setStep('cart')}
+                className="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-zinc-400 transition-colors hover:bg-zinc-900 hover:text-white"
+                aria-label="Volver al carrito"
+              >
+                <ArrowLeft size={18} />
+              </button>
+            )}
+            <div>
+              <h2 className="text-lg font-black uppercase tracking-wide text-white">
+                {view === 'cart' ? 'Tu carrito' : view === 'details' ? 'Tus datos' : 'Pedido'}
+              </h2>
+              <p className="mt-0.5 text-xs text-zinc-500">
+                {view === 'details'
+                  ? 'Paso 2 de 2 · Para preparar tu pedido'
+                  : totalItems === 0
+                  ? 'Sin productos'
+                  : `${totalItems} producto${totalItems !== 1 ? 's' : ''}`}
+              </p>
+            </div>
           </div>
           <button
             onClick={closeCart}
@@ -82,6 +101,17 @@ export default function Cart() {
           </button>
         </div>
 
+        {view === 'details' && (
+          <CheckoutDetails
+            onSent={(url) => {
+              setSentUrl(url)
+              setStep('sent')
+            }}
+          />
+        )}
+        {view === 'sent' && <OrderSent waUrl={sentUrl} onBack={() => setStep('cart')} />}
+
+        {view === 'cart' && (<>
         {/* Items */}
         <div className="flex-1 space-y-3 overflow-y-auto p-4">
           {state.items.length === 0 ? (
@@ -98,26 +128,12 @@ export default function Cart() {
               </Link>
             </div>
           ) : (
-            state.items.map((item) => (
+            <>
+            {state.items.map((item) => (
               <div
                 key={item.product.id}
                 className="flex gap-3 rounded-xl border border-zinc-800 bg-zinc-900 p-3"
               >
-                {/* Image */}
-                <Link
-                  href={`/productos/${item.product.slug}`}
-                  onClick={closeCart}
-                  className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-zinc-800"
-                >
-                  <Image
-                    src={item.product.images[0] ?? '/images/placeholder-product.jpg'}
-                    alt={item.product.name}
-                    fill
-                    className="object-cover"
-                    sizes="80px"
-                  />
-                </Link>
-
                 {/* Info */}
                 <div className="flex min-w-0 flex-1 flex-col">
                   <div className="flex items-start justify-between gap-2">
@@ -130,37 +146,35 @@ export default function Cart() {
                     </Link>
                     <button
                       onClick={() => removeItem(item.product.id)}
-                      className="flex-shrink-0 p-0.5 text-zinc-600 transition-colors hover:text-red-400"
+                      className="-mr-2 -mt-2 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-red-400"
                       aria-label={`Quitar ${item.product.name}`}
                     >
-                      <Trash2 size={14} />
+                      <Trash2 size={16} />
                     </button>
                   </div>
-                  <p className="mt-0.5 font-mono text-[11px] text-zinc-500">{item.product.sku}</p>
+                  <p className="mt-0.5 font-mono text-[0.6875rem] text-zinc-500">{item.product.sku}</p>
 
                   <div className="mt-auto flex items-end justify-between gap-2 pt-2">
                     {/* Qty stepper */}
                     <div className="flex items-center rounded-full border border-zinc-700">
                       <button
-                        onClick={() =>
-                          item.quantity > 1
-                            ? updateQty(item.product.id, item.quantity - 1)
-                            : removeItem(item.product.id)
-                        }
-                        className="flex h-7 w-7 items-center justify-center text-zinc-400 transition-colors hover:text-white"
+                        onClick={() => updateQty(item.product.id, item.quantity - 1)}
+                        disabled={item.quantity <= 1}
+                        className="flex h-10 w-10 items-center justify-center text-zinc-400 transition-colors hover:text-white disabled:opacity-30"
                         aria-label={`Reducir cantidad de ${item.product.name}`}
                       >
-                        <Minus size={12} />
+                        <Minus size={14} />
                       </button>
                       <span className="w-6 text-center text-sm text-white" aria-live="polite">
                         {item.quantity}
                       </span>
                       <button
                         onClick={() => updateQty(item.product.id, item.quantity + 1)}
-                        className="flex h-7 w-7 items-center justify-center text-zinc-400 transition-colors hover:text-white"
+                        disabled={item.quantity >= maxQty(item.product)}
+                        className="flex h-10 w-10 items-center justify-center text-zinc-400 transition-colors hover:text-white disabled:opacity-30"
                         aria-label={`Aumentar cantidad de ${item.product.name}`}
                       >
-                        <Plus size={12} />
+                        <Plus size={14} />
                       </button>
                     </div>
 
@@ -172,13 +186,14 @@ export default function Cart() {
                           : formatPrice(null)}
                       </p>
                       {item.product.price != null && item.quantity > 1 && (
-                        <p className="text-[11px] text-zinc-500">{formatPrice(item.product.price)} c/u</p>
+                        <p className="text-[0.6875rem] text-zinc-500">{formatPrice(item.product.price)} c/u</p>
                       )}
                     </div>
                   </div>
                 </div>
               </div>
-            ))
+            ))}
+            </>
           )}
         </div>
 
@@ -194,28 +209,13 @@ export default function Cart() {
                 Algunos productos son a consultar y no están incluidos en el subtotal.
               </p>
             )}
-            <a
-              href={waUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackProducts('order', state.items.map((i) => i.product.id))}
+            <button
+              onClick={() => setStep('details')}
               className="flex w-full items-center justify-center gap-2 rounded-sm bg-[var(--accent)] py-4 text-sm font-bold uppercase tracking-[1.5px] text-white transition-colors hover:bg-[var(--accent-hover)]"
             >
-              Continuar con la compra
+              Continuar con el pedido
               <ArrowRight size={18} />
-            </a>
-            <p className="flex items-center justify-center gap-1.5 text-[11px] text-zinc-500">
-              <MessageCircle size={12} />
-              Coordinamos pago y envío por WhatsApp
-            </p>
-            <Link
-              href="/personalizar"
-              onClick={closeCart}
-              className="flex w-full items-center justify-center gap-2 rounded-sm border border-zinc-700 py-3 text-xs font-semibold uppercase tracking-[1.5px] text-zinc-200 transition-colors hover:border-zinc-500 hover:text-white"
-            >
-              <Wrench size={14} />
-              Personalizar mi vehículo
-            </Link>
+            </button>
             {confirmingClear ? (
               <div
                 role="alertdialog"
@@ -265,6 +265,7 @@ export default function Cart() {
             )}
           </div>
         )}
+        </>)}
       </aside>
     </>
   )

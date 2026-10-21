@@ -12,16 +12,15 @@ function priceLines(product: Product, quantity: number, indent = ''): string {
 }
 
 export function generateWhatsAppOrder(params: WhatsAppOrderParams): string {
-  const { items, product, quantity = 1, vehicle, terrain, url } = params
+  const { items, product, quantity = 1, vehicle, url, customer } = params
 
-  const header = `Hola ${siteConfig.whatsappName} 👋\n\n`
+  const header = `Hola ${siteConfig.whatsappName}\n\n`
 
   // Single product inquiry
   if (product && !items?.length) {
     const vehicleStr = vehicle
       ? `Vehículo: ${[vehicle.brand, vehicle.model, vehicle.year].filter(Boolean).join(' ')}\n`
       : ''
-    const terrainStr = terrain ? `Configuración: ${terrain.toUpperCase()}\n` : ''
     const urlStr = url ? `\nLink del producto:\n${url}` : ''
 
     return (
@@ -30,7 +29,6 @@ export function generateWhatsAppOrder(params: WhatsAppOrderParams): string {
       `Producto: ${product.name}\n` +
       `SKU: ${product.sku}\n` +
       vehicleStr +
-      terrainStr +
       `Cantidad: ${quantity}\n` +
       priceLines(product, quantity) +
       urlStr
@@ -39,10 +37,12 @@ export function generateWhatsAppOrder(params: WhatsAppOrderParams): string {
 
   // Full cart / configuration order
   if (items?.length) {
+    // En un pedido no se pide el vehículo; en una consulta sin vehículo queda a definir
     const vehicleStr = vehicle
-      ? `Vehículo: ${[vehicle.brand, vehicle.model, vehicle.year].filter(Boolean).join(' ')}`
-      : 'Vehículo: A definir'
-    const terrainStr = terrain ? `Uso: ${terrain.toUpperCase()}` : ''
+      ? `Vehículo: ${[vehicle.brand, vehicle.model, vehicle.year].filter(Boolean).join(' ')}\n`
+      : customer
+        ? ''
+        : `Vehículo: A definir\n`
 
     const itemLines = items
       .map(
@@ -59,11 +59,18 @@ export function generateWhatsAppOrder(params: WhatsAppOrderParams): string {
         ? `\n\nTotal: ${formatPrice(total)}` + (someUnpriced ? ' (sin contar los productos a consultar)' : '')
         : ''
 
+    // Con datos del cliente es un pedido; sin ellos, una consulta (p. ej. desde /personalizar)
+    const customerStr = customer
+      ? `Nombre: ${customer.name}\n` +
+        `Entrega: ${customer.delivery}\n` +
+        `Pago: ${customer.payment}\n`
+      : ''
+
     return (
       header +
-      `Quiero consultar esta configuración:\n\n` +
-      `${vehicleStr}\n` +
-      (terrainStr ? `${terrainStr}\n` : '') +
+      (customer ? `Quiero hacer este pedido:\n\n` : `Quiero consultar esta configuración:\n\n`) +
+      customerStr +
+      vehicleStr +
       `\nProductos:\n\n` +
       itemLines +
       totalStr

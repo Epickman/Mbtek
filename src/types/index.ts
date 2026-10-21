@@ -1,7 +1,5 @@
 // Shared TypeScript types
 
-export type Terrain = 'tierra' | 'arena'
-
 export type Vehicle = {
   brand: string
   model: string
@@ -23,9 +21,7 @@ export interface Product {
   sku: string
   category: string
   subcategory?: string
-  terrain: Terrain[]
   vehicles: string[] // e.g. ['yamaha-raptor-700', 'yamaha-yfz450r']
-  images: string[]
   price?: number
   stock?: number
   description: string
@@ -63,27 +59,21 @@ export interface Category {
   slug: string
   icon?: string
   description?: string
-  terrain?: Terrain[]
   order: number
 }
 
-export interface TerrainConfig {
-  id: Terrain
+/** Datos que completa el cliente antes de enviar el pedido */
+export interface CustomerInfo {
   name: string
-  subtitle: string
-  description: string
-  keywords: string[]
-  colorPrimary: string
-  colorSecondary: string
-  bgClass: string
-  categories: string[]
+  delivery: string
+  payment: string
 }
 
 export interface WhatsAppOrderParams {
+  customer?: CustomerInfo
   items?: CartItem[]
   product?: Product
   quantity?: number
   vehicle?: Vehicle
-  terrain?: Terrain
   url?: string
 }

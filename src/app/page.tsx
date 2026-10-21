@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import HeroScrub from '@/components/HeroScrub/HeroScrub'
-import HeroSection from '@/components/HeroSection/HeroSection'
 import MostWanted from '@/components/MostWanted/MostWanted'
-import PromoBanner from '@/components/PromoBanner/PromoBanner'
+import ContactBanner from '@/components/ContactBanner/ContactBanner'
 import FeaturedProducts from '@/components/FeaturedProducts/FeaturedProducts'
 import CategoriesGrid from '@/components/CategoriesGrid/CategoriesGrid'
+import OriginalParts from '@/components/OriginalParts/OriginalParts'
+import Reveal from '@/components/ui/Reveal'
 import siteConfig from '@/config/site'
 
 export const metadata: Metadata = {
@@ -18,20 +19,22 @@ export default function HomePage() {
       {/* ── Intro: logo + video scrolleable + carteles ────────── */}
       <HeroScrub />
 
-      {/* ── Armá tu ATV según el terreno (TIERRA / ARENA) ─────── */}
-      <HeroSection />
-
       {/* ── Categorías ────────────────────────────────────────── */}
       <CategoriesGrid />
+
+      {/* ── Productos en stock ────────────────────────────────── */}
+      <FeaturedProducts />
+
+      {/* ── Piezas originales ─────────────────────────────────── */}
+      <OriginalParts />
 
       {/* ── Cuatriciclos más buscados ─────────────────────────── */}
       <MostWanted />
 
-      {/* ── Promociones de la semana ──────────────────────────── */}
-      <PromoBanner />
-
-      {/* ── Productos destacados ──────────────────────────────── */}
-      <FeaturedProducts />
+      {/* ── ¿No lo encontraste? Pedilo por WhatsApp ───────────── */}
+      <Reveal>
+        <ContactBanner />
+      </Reveal>
 
     </>
   )

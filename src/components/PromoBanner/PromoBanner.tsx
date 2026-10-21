@@ -1,33 +1,14 @@
-import Image from 'next/image'
 import Link from 'next/link'
-import { getActivePromotion, type Promotion } from '@/services/promotion'
-import { formatPrice } from '@/utils/formatPrice'
 
-// Se usa cuando no hay ninguna promoción vigente cargada en Sanity.
-const FALLBACK: Promotion = {
+const promo = {
   eyebrow: 'Temporada 2026',
   title: 'Promociones\nde la semana',
   description:
     'Descuentos en repuestos seleccionados y envíos bonificados en compras superiores a determinado monto. Consultanos por tu modelo.',
-  cta: { label: 'Quiero saber más', href: '/contacto', external: false },
-  items: [],
+  cta: { label: 'Quiero saber más', href: '/contacto' },
 }
 
-export default async function PromoBanner() {
-  const promo = (await getActivePromotion()) ?? FALLBACK
-  const { cta, image } = promo
-  const hasAside = !!image || promo.items.length > 0
-
-  const button = cta.external ? (
-    <a href={cta.href} target="_blank" rel="noopener noreferrer" className="mb-btn mb-btn-solid">
-      {cta.label}
-    </a>
-  ) : (
-    <Link href={cta.href} className="mb-btn mb-btn-solid">
-      {cta.label}
-    </Link>
-  )
-
+export default function PromoBanner() {
   return (
     <section
       className="relative overflow-hidden border-y border-white/10"
@@ -61,67 +42,11 @@ export default async function PromoBanner() {
               {promo.description}
             </p>
           )}
-          {hasAside && <div className="mt-6">{button}</div>}
         </div>
 
-        {!hasAside && button}
-
-        {hasAside && (
-          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-stretch">
-            {image && (
-              <div className="relative aspect-[3/2] w-full overflow-hidden rounded-sm border border-white/15 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8)] sm:w-[clamp(260px,32vw,420px)]">
-                <Image
-                  src={image.url}
-                  alt={image.alt}
-                  fill
-                  sizes="(min-width: 640px) 420px, 100vw"
-                  className="object-cover"
-                  style={{ objectPosition: image.position }}
-                />
-              </div>
-            )}
-
-            {promo.items.length > 0 && (
-              <ul className="grid w-full gap-3 sm:w-auto sm:grid-cols-[repeat(auto-fit,minmax(170px,190px))]" aria-label="Productos en promoción">
-                {promo.items.map(({ product, salePrice }) => {
-                  const onSale = salePrice != null && product.price != null && salePrice < product.price
-                  return (
-                    <li key={product.id}>
-                      <Link
-                        href={`/productos/${product.slug}`}
-                        className="group flex h-full gap-3 rounded-sm border border-white/15 bg-black/55 p-3 backdrop-blur-sm transition-colors hover:border-white/60 sm:flex-col"
-                      >
-                        <div className="relative aspect-square w-20 flex-shrink-0 overflow-hidden rounded-sm bg-zinc-800 sm:w-full">
-                          <Image
-                            src={product.images[0]}
-                            alt={product.name}
-                            fill
-                            sizes="(min-width: 640px) 190px, 80px"
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                          {onSale && (
-                            <span className="absolute left-1.5 top-1.5 rounded-sm bg-[var(--accent)] px-1.5 py-0.5 text-[10px] font-bold text-white">
-                              -{Math.round((1 - salePrice / product.price!) * 100)}%
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex flex-col justify-center gap-1">
-                          <span className="text-[13px] font-medium leading-snug text-white">{product.name}</span>
-                          <span className="flex flex-wrap items-baseline gap-x-2">
-                            {onSale && (
-                              <span className="text-xs text-white/55 line-through">{formatPrice(product.price)}</span>
-                            )}
-                            <span className="text-sm font-bold text-white">{formatPrice(salePrice ?? product.price)}</span>
-                          </span>
-                        </div>
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
-          </div>
-        )}
+        <Link href={promo.cta.href} className="mb-btn mb-btn-solid">
+          {promo.cta.label}
+        </Link>
       </div>
     </section>
   )

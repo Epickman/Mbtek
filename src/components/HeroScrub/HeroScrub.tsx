@@ -279,16 +279,26 @@ export default function HeroScrub() {
           style={{ background: 'linear-gradient(180deg, rgba(5,5,5,0.35) 0%, rgba(5,5,5,0.35) 40%, rgba(5,5,5,0.9) 100%)' }}
         />
 
-        {/* Intro: solo el logo */}
+        {/* Intro: logo con la bandera de la marca, igual que en el footer */}
         <div ref={introRef} className="pointer-events-none absolute inset-0 z-[3] flex items-center justify-center px-5 will-change-transform">
-          <Image
-            src="/brand/mbtek-logo.png"
-            alt="MBTEK Parts Atv & Mx"
-            width={1677}
-            height={405}
-            priority
-            className="h-auto w-[min(85%,560px)] drop-shadow-[0_10px_40px_rgba(0,0,0,0.6)]"
-          />
+          {/* Corrido a la derecha para que bandera + logo queden centrados como conjunto */}
+          <div className="relative w-[min(66%,560px)] translate-x-[19%]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/brand-flag.png"
+              alt=""
+              aria-hidden="true"
+              className="absolute right-[calc(100%+4%)] top-1/2 h-auto w-[34%] max-w-none -translate-y-1/2 opacity-[0.55] [filter:grayscale(1)_brightness(2)_blur(0.5px)] [mask-image:linear-gradient(90deg,transparent_0%,#000_55%,#000_100%)]"
+            />
+            <Image
+              src="/brand/mbtek-logo.png"
+              alt="MBTEK Parts Atv & Mx"
+              width={1677}
+              height={405}
+              priority
+              className="relative h-auto w-full drop-shadow-[0_10px_40px_rgba(0,0,0,0.6)]"
+            />
+          </div>
         </div>
 
         {/* Carteles sobre el video */}
@@ -340,7 +350,7 @@ export default function HeroScrub() {
               aria-label={`Ir a: ${s.headline}`}
               className="group flex items-center justify-end gap-3 py-1"
             >
-              <span className="hidden text-[10px] uppercase tracking-[2px] text-zinc-400 opacity-0 transition-opacity group-hover:opacity-100 sm:inline">
+              <span className="hidden text-[0.625rem] uppercase tracking-[2px] text-zinc-400 opacity-0 transition-opacity group-hover:opacity-100 sm:inline">
                 {s.tag}
               </span>
               <span className="block h-2 w-2 rounded-full bg-white/30 transition-all duration-300 group-hover:bg-white/70 group-data-[active]:h-6 group-data-[active]:bg-[var(--accent)]" />
@@ -349,7 +359,7 @@ export default function HeroScrub() {
         </div>
 
         <div ref={hintRef} className="pointer-events-none absolute bottom-7 left-1/2 z-[2] flex -translate-x-1/2 flex-col items-center gap-2 text-zinc-500" aria-hidden="true">
-          <span className="text-[10px] uppercase tracking-[3px]">Scroll</span>
+          <span className="text-[0.625rem] uppercase tracking-[3px]">Scroll</span>
           <div className="relative h-10 w-px overflow-hidden bg-white/20">
             <i ref={barRef} className="absolute left-0 top-0 block h-[0%] w-full bg-[var(--accent)]" />
           </div>

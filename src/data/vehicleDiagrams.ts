@@ -23,8 +23,8 @@ export const vehicleDiagrams: Record<DiagramType, VehicleDiagram> = {
     type: 'atv',
     name: 'ATV',
     description: 'Cuatriciclos deportivos y utilitarios',
-    // public/images/quad-ilustracion.webp — from quadpartidoalmedio.png, background removed
-    img: { src: '/images/quad-ilustracion.webp', w: 1028, h: 624 },
+    // public/images/quad-ilustracion.png (2636×1600); w/h = coordinate space of the hotspots below
+    img: { src: '/images/quad-ilustracion.png', w: 1028, h: 624 },
     hotspots: {
       accesorios:  { cx: 640, cy: 38 },
       admision:    { cx: 603, cy: 150 },
@@ -50,7 +50,7 @@ export const vehicleDiagrams: Record<DiagramType, VehicleDiagram> = {
       transmision: [{ circle: [395, 420, 32] }],
       proteccion: [{ poly: [[440, 456], [605, 442], [615, 465], [445, 482]] }],
       frenos: [{ circle: [870, 465, 45] }, { circle: [152, 462, 40] }],
-      ruedas: [{ ring: [868, 463, 92, 45] }, { ring: [158, 468, 90, 40] }],
+      ruedas: [{ ring: [868, 463, 152, 45] }, { ring: [158, 468, 145, 40] }],
       neumaticos: [{ ring: [868, 463, 152, 92] }, { ring: [158, 468, 145, 90] }],
       accesorios: [{ poly: [[598, 15], [690, 10], [720, 40], [735, 105], [690, 110], [665, 70], [598, 55]] }],
     },
@@ -86,7 +86,7 @@ export const vehicleDiagrams: Record<DiagramType, VehicleDiagram> = {
       transmision: [{ ring: [175, 515, 58, 20] }, { circle: [470, 405, 28] }],
       proteccion: [{ poly: [[505, 470], [650, 455], [660, 495], [560, 515], [505, 500]] }],
       frenos: [{ circle: [928, 505, 75] }, { circle: [255, 530, 30] }],
-      ruedas: [{ ring: [928, 505, 130, 75] }, { ring: [175, 515, 122, 58] }],
+      ruedas: [{ ring: [928, 505, 170, 75] }, { ring: [175, 515, 165, 58] }],
       neumaticos: [{ ring: [928, 505, 170, 130] }, { ring: [175, 515, 165, 122] }],
       accesorios: [{ poly: [[640, 20], [705, 12], [740, 50], [720, 75], [655, 60]] }],
     },

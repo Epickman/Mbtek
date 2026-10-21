@@ -217,7 +217,7 @@ export default function VehicleDiagram({
       </svg>
 
       {/* Legend */}
-      <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 pb-1 pt-3 text-[11px] text-zinc-400">
+      <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 pb-1 pt-3 text-[0.6875rem] text-zinc-400">
         <span className="flex items-center gap-1.5">
           <span className="h-2.5 w-2.5 rounded-full" style={{ background: IN_CART }} /> En tu carrito
         </span>

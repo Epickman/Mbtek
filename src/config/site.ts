@@ -16,8 +16,12 @@ const siteConfig = {
   currency: 'ARS',
   currencySymbol: '$',
 
-  // Defaults
-  defaultTerrain: 'tierra' as 'tierra' | 'arena',
+  // Checkout: opciones que el cliente elige antes de enviar el pedido por WhatsApp.
+  // Ajustalas a lo que realmente ofrece el negocio.
+  checkout: {
+    deliveryOptions: ['Envío a domicilio', 'Retiro en persona'],
+    paymentOptions: ['Transferencia', 'Efectivo', 'Tarjeta / Mercado Pago', 'A coordinar'],
+  },
 
   // Accent color (used in Tailwind via CSS var --accent)
   accentColor: '#e2001a', // Rojo MBTEK — change freely
@@ -32,7 +36,7 @@ const siteConfig = {
   seo: {
     title: 'MBTEK Parts | ATV & MX Performance Parts',
     description:
-      'Repuestos, piezas y accesorios premium para ATV, cuatriciclos, MX y vehículos off-road. Compatible con Yamaha, Honda, Can-Am, Polaris, Kawasaki, Suzuki y más. Armá tu ATV según el terreno.',
+      'Repuestos, piezas y accesorios premium para ATV, cuatriciclos, MX y vehículos off-road. Compatible con Yamaha, Honda, Can-Am, Polaris, Kawasaki, Suzuki y más. Armá tu ATV a tu medida.',
     ogImage: '/images/og-default.jpg',
     twitterHandle: '@mbtek_parts',
     locale: 'es_AR',

@@ -16,10 +16,6 @@
   --accent-hover: #ff1a33;
   --accent-muted: #e2001a20;
 
-  /* Terrain-specific overrides (set by .terrain-tierra / .terrain-arena) */
-  --terrain-primary:   #e2001a;
-  --terrain-secondary: #a4001a;
-
   /* Background & foreground */
   --background: var(--black);
   --foreground: var(--white);
@@ -40,6 +36,8 @@
 }
 
 html {
+  /* Escala global: todo lo definido en rem (textos, espaciados, anchos) crece en proporción */
+  font-size: 112.5%;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
@@ -79,7 +77,7 @@ body {
 .mb-eyebrow span {
   font-family: var(--font-anton), sans-serif;
   letter-spacing: 3px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: #b8b8b8;
   text-transform: uppercase;
 }
@@ -90,7 +88,7 @@ body {
   font-family: var(--font-anton), sans-serif;
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-size: clamp(26px, 4.5vw, 42px);
+  font-size: clamp(1.625rem, 4.5vw, 2.625rem);
   line-height: 1.1;
   color: var(--chrome-2);
 }
@@ -103,10 +101,10 @@ body {
   font-family: var(--font-oswald), sans-serif;
   font-weight: 600;
   letter-spacing: 1.5px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 14px 28px;
+  padding: 0.875rem 1.75rem;
   border-radius: 2px;
   border: 1px solid transparent;
   cursor: pointer;
@@ -118,20 +116,6 @@ body {
 .mb-btn-outline { background: transparent; color: #fff; border-color: rgba(255,255,255,0.35); }
 .mb-btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(226,0,26,0.08); }
 
-/* ── Terrain contexts ─────────────────────────────────────────────────────── */
-.terrain-tierra {
-  --terrain-primary:   #78350F;
-  --terrain-secondary: #92400E;
-  --accent:            #D97706;
-  --accent-hover:      #B45309;
-}
-
-.terrain-arena {
-  --terrain-primary:   #B45309;
-  --terrain-secondary: #D97706;
-  --accent:            #FBBF24;
-  --accent-hover:      #F59E0B;
-}
 
 /* ── Marquee animation ────────────────────────────────────────────────────── */
 @keyframes marquee {

@@ -4,12 +4,11 @@
  * the implementations below with API calls through /api/contabilium.
  */
 
-import type { Product, Terrain } from '@/types'
+import type { Product } from '@/types'
 import {
   products,
   getFeaturedProducts,
   getProductBySlug,
-  getProductsByTerrain,
   getProductsByCategory,
   getProductsByVehicle,
 } from '@/data/products'
@@ -30,11 +29,6 @@ export const ProductService = {
     return getProductBySlug(slug)
   },
 
-  /** Get products compatible with a terrain */
-  getByTerrain(terrain: Terrain): Product[] {
-    return getProductsByTerrain(terrain)
-  },
-
   /** Get products by category ID */
   getByCategory(category: string): Product[] {
     return getProductsByCategory(category)
@@ -45,9 +39,8 @@ export const ProductService = {
     return getProductsByVehicle(vehicleId)
   },
 
-  /** Get products filtered by terrain + category + vehicle */
+  /** Get products filtered by category + vehicle */
   getFiltered(filters: {
-    terrain?: Terrain
     category?: string
     vehicleId?: string
   }): Product[] {
@@ -57,10 +50,9 @@ export const ProductService = {
 
 export function filterProducts(
   list: Product[],
-  filters: { terrain?: Terrain; category?: string; vehicleId?: string }
+  filters: { category?: string; vehicleId?: string }
 ): Product[] {
   return list.filter((p) => {
-    if (filters.terrain && !p.terrain.includes(filters.terrain)) return false
     if (filters.category && p.category !== filters.category) return false
     if (filters.vehicleId && !p.vehicles.includes(filters.vehicleId)) return false
     return true

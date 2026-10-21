@@ -7,6 +7,7 @@ import { getLiveProducts } from '@/services/liveProducts'
 import TopBrandBar from '@/components/TopBrandBar/TopBrandBar'
 import Navbar from '@/components/Navbar/Navbar'
 import Cart from '@/components/Cart/Cart'
+import CartToast from '@/components/Cart/CartToast'
 import Footer from '@/components/Footer/Footer'
 import siteConfig from '@/config/site'
 
@@ -64,7 +65,7 @@ export default async function RootLayout({
 
   return (
     <html lang="es-AR" className={`${anton.variable} ${oswald.variable}`} suppressHydrationWarning>
-      <body className="bg-[var(--black)] text-[var(--white)] antialiased">
+      <body className="bg-[var(--black)] text-[var(--white)] antialiased" suppressHydrationWarning>
         <ProductsProvider products={products}>
         <CartProvider>
           {/* Top bar + nav are fixed/sticky, together ~64px offset */}
@@ -79,6 +80,7 @@ export default async function RootLayout({
 
           {/* Floating cart drawer */}
           <Cart />
+          <CartToast />
         </CartProvider>
         </ProductsProvider>
       </body>

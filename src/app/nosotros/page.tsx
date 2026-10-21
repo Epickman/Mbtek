@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { MessageCircle } from 'lucide-react'
 import siteConfig from '@/config/site'
+import Reveal from '@/components/ui/Reveal'
 
 export const metadata: Metadata = {
   title: 'Nosotros',
@@ -9,24 +11,35 @@ export const metadata: Metadata = {
 }
 
 export default function NosotrosPage() {
-  const waUrl = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent('Hola MBTEK Parts 👋 Quiero más información.')}`
+  const waUrl = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent('Hola MBTEK Parts! Quiero más información.')}`
 
   return (
-    <div className="min-h-screen bg-zinc-950 pt-[80px]">
-      {/* Hero */}
-      <div className="bg-zinc-900 border-b border-zinc-800 py-24 px-4 text-center">
-        <p className="text-zinc-500 text-xs tracking-[0.3em] uppercase mb-3">MBTEK Parts</p>
-        <h1 className="text-white text-4xl sm:text-7xl font-black tracking-tight uppercase leading-none">
-          ENGINEERED
-        </h1>
-        <h1 className="text-[var(--accent)] text-4xl sm:text-7xl font-black tracking-tight uppercase leading-none">
-          IN ARGENTINA.
-        </h1>
+    <div className="min-h-screen bg-zinc-950">
+      {/* Hero a pantalla completa: la foto queda detrás del header, como en el inicio */}
+      <div className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-zinc-900 border-b border-zinc-800 px-4 pt-[112px] pb-16 text-center">
+        <Image
+          src="/images/cuatriarg.jpeg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[60%_62%]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/70 via-zinc-950/30 to-zinc-950/70" aria-hidden />
+        <Reveal className="relative">
+          <p className="text-zinc-300 text-xs tracking-[0.3em] uppercase mb-3">MBTEK Parts</p>
+          <h1 className="text-white text-4xl sm:text-7xl font-black tracking-tight uppercase leading-none">
+            ENGINEERED
+          </h1>
+          <h1 className="text-[var(--accent)] text-4xl sm:text-7xl font-black tracking-tight uppercase leading-none">
+            IN ARGENTINA.
+          </h1>
+        </Reveal>
       </div>
 
       <div className="max-w-screen-lg mx-auto px-4 py-20 space-y-16">
         {/* About */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <Reveal className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <p className="text-zinc-500 text-xs tracking-[0.3em] uppercase mb-4">Quiénes somos</p>
             <h2 className="text-white text-3xl font-black uppercase tracking-tight mb-6">
@@ -38,26 +51,26 @@ export default function NosotrosPage() {
             </p>
             <p className="text-zinc-400 leading-relaxed mt-4">
               Trabajamos con los mejores fabricantes del mundo para traerte los componentes
-              que tu ATV necesita, sin importar si lo usás en barro, montaña o dunas de arena.
+              que tu ATV necesita, para el uso que le des.
             </p>
           </div>
           <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-10 text-center">
             <p className="text-6xl font-black text-white mb-2">ATV</p>
             <p className="text-zinc-500 text-sm tracking-wide">& MX Performance Parts</p>
           </div>
-        </div>
+        </Reveal>
 
         {/* Mission */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-10 text-center">
+        <Reveal className="bg-zinc-900 border border-zinc-800 rounded-2xl p-10 text-center">
           <p className="text-zinc-500 text-xs tracking-[0.3em] uppercase mb-4">Nuestra misión</p>
           <blockquote className="text-white text-2xl sm:text-4xl font-black uppercase tracking-tight">
             &ldquo;ARMÁ TU ATV
-            <span className="text-[var(--accent)]"> SEGÚN EL TERRENO.&rdquo;</span>
+            <span className="text-[var(--accent)]"> A TU MEDIDA.&rdquo;</span>
           </blockquote>
-        </div>
+        </Reveal>
 
         {/* CTA */}
-        <div className="text-center">
+        <Reveal className="text-center">
           <a
             href={waUrl}
             target="_blank"
@@ -67,7 +80,7 @@ export default function NosotrosPage() {
             <MessageCircle size={18} />
             Contactar por WhatsApp
           </a>
-        </div>
+        </Reveal>
       </div>
     </div>
   )
