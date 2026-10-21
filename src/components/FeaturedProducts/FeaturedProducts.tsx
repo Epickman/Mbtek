@@ -12,7 +12,7 @@ export default async function FeaturedProducts() {
   if (featured.length === 0) return null
 
   return (
-    <section className="bg-[var(--black)] py-[clamp(56px,9vw,110px)]" aria-labelledby="featured-heading">
+    <section className="border-t border-white/10 bg-[var(--black)] py-[clamp(56px,9vw,110px)]" aria-labelledby="featured-heading">
       <div className="max-w-screen-xl mx-auto px-4">
         {/* Editorial header */}
         <Reveal className="mb-[clamp(30px,5vw,54px)] text-center">
