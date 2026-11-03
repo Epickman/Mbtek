@@ -22,7 +22,7 @@ export default function HomePage() {
       {/* ── Categorías ────────────────────────────────────────── */}
       <CategoriesGrid />
 
-      {/* ── Productos en stock ────────────────────────────────── */}
+      {/* ── Productos destacados ────────────────────────────── */}
       <FeaturedProducts />
 
       {/* ── Piezas originales ─────────────────────────────────── */}

@@ -112,7 +112,7 @@ export function OrderSent({ waUrl, onBack }: { waUrl: string; onBack: () => void
       <h3 className="mt-5 text-xl font-black uppercase tracking-wide text-white">¡Tu pedido está listo!</h3>
       <p className="mt-2 text-sm leading-relaxed text-zinc-400">
         Abrimos WhatsApp con el detalle. Solo falta que toques <strong className="text-white">Enviar</strong>{' '}
-        y te respondemos para confirmar stock, pago y envío.
+        y te respondemos para confirmar disponibilidad, pago y envío.
       </p>
       <a
         href={waUrl}

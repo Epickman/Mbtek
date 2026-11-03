@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ShoppingCart, X, Minus, Plus, Trash2, ArrowRight, ArrowLeft } from 'lucide-react'
-import { useCart, maxQty } from '@/store/cartStore'
+import { useCart } from '@/store/cartStore'
 import { CheckoutDetails, OrderSent } from './CheckoutSteps'
 import { formatPrice } from '@/utils/formatPrice'
 import { cn } from '@/utils/cn'
@@ -170,7 +170,6 @@ export default function Cart() {
                       </span>
                       <button
                         onClick={() => updateQty(item.product.id, item.quantity + 1)}
-                        disabled={item.quantity >= maxQty(item.product)}
                         className="flex h-10 w-10 items-center justify-center text-zinc-400 transition-colors hover:text-white disabled:opacity-30"
                         aria-label={`Aumentar cantidad de ${item.product.name}`}
                       >

@@ -9,7 +9,7 @@ export function ProductsProvider({ products, children }: { products: Product[]; 
   return <ProductsContext.Provider value={products}>{children}</ProductsContext.Provider>
 }
 
-/** Catálogo con precios y stock actualizados (para componentes de cliente). */
+/** Catálogo con precios actualizados (para componentes de cliente). */
 export function useProducts(): Product[] {
   return useContext(ProductsContext)
 }

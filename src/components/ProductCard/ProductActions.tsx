@@ -20,7 +20,6 @@ interface ProductActionsProps {
 export default function ProductActions({ product, variant = 'card', className }: ProductActionsProps) {
   const { addItem, openCart, state } = useCart()
   const isInCart = state.items.some((i) => i.product.id === product.id)
-  const outOfStock = product.stock === 0
 
   const waUrl = generateWhatsAppUrl({
     product,
@@ -32,14 +31,7 @@ export default function ProductActions({ product, variant = 'card', className }:
 
   return (
     <div className={cn('flex gap-2', className)}>
-      {outOfStock ? (
-        <button
-          disabled
-          className={cn(base, 'cursor-not-allowed border border-zinc-800 bg-zinc-900 text-zinc-500', variant === 'card' ? 'flex-1' : 'px-4')}
-        >
-          Sin stock
-        </button>
-      ) : isInCart ? (
+      {isInCart ? (
         <button
           onClick={openCart}
           className={cn(
@@ -74,13 +66,13 @@ export default function ProductActions({ product, variant = 'card', className }:
         className={cn(
           base,
           'border border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white',
-          variant === 'card' && !outOfStock ? 'w-11' : 'px-4'
+          variant === 'card' ? 'w-11' : 'px-4'
         )}
         aria-label={`Consultar ${product.name} por WhatsApp`}
         title="Consultar por WhatsApp"
       >
         <MessageCircle size={15} />
-        {(variant === 'list' || outOfStock) && <span>Consultar</span>}
+        {variant === 'list' && <span>Consultar</span>}
       </a>
     </div>
   )

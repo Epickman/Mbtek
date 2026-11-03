@@ -22,14 +22,13 @@ interface Filters {
   search: string
   category: string
   sort: '' | 'price-asc' | 'price-desc'
-  inStock: boolean
 }
 
 const ORIGINALS_WA_URL = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
   `Hola ${siteConfig.whatsappName}! Estoy buscando una pieza original para mi vehículo: `
 )}`
 
-const emptyFilters: Filters = { search: '', category: '', sort: '', inStock: false }
+const emptyFilters: Filters = { search: '', category: '', sort: '' }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Root
@@ -120,7 +119,7 @@ function CatalogoTab({
 
   const clear = useCallback(() => setFilters(emptyFilters), [])
 
-  const activeCount = (filters.category ? 1 : 0) + (filters.search ? 1 : 0) + (filters.inStock ? 1 : 0)
+  const activeCount = (filters.category ? 1 : 0) + (filters.search ? 1 : 0)
 
   const filtered = useMemo(() => {
     let r = [...products]
@@ -129,7 +128,6 @@ function CatalogoTab({
       r = r.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q))
     }
     if (filters.category) r = r.filter(p => p.category === filters.category)
-    if (filters.inStock) r = r.filter(p => (p.stock ?? 0) > 0)
     // Los productos "a consultar" van siempre al final
     const priceOf = (p: Product, missing: number) => p.price ?? missing
     if (filters.sort === 'price-asc') r.sort((a, b) => priceOf(a, Infinity) - priceOf(b, Infinity))
@@ -175,7 +173,6 @@ function CatalogoTab({
             <Chip label={categories.find(c => c.id === filters.category)?.name ?? filters.category} onRemove={() => update('category', '')} />
           )}
           {filters.search && <Chip label={`"${filters.search}"`} onRemove={() => update('search', '')} />}
-          {filters.inStock && <Chip label="Con stock" onRemove={() => update('inStock', false)} />}
           <button onClick={clear} className="text-zinc-500 hover:text-zinc-300 text-xs underline underline-offset-2 transition-colors self-center">Limpiar</button>
         </div>
       )}
@@ -210,7 +207,7 @@ function CatalogoTab({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Menú de filtros (categoría, stock y orden)
+// Menú de filtros (categoría y orden)
 // ─────────────────────────────────────────────────────────────────────────────
 
 const SORT_OPTIONS: { value: Filters['sort']; label: string }[] = [
@@ -251,7 +248,7 @@ function FilterMenu({
     return m
   }, [products])
   const used = categories.filter(c => counts.has(c.id))
-  const active = (filters.category ? 1 : 0) + (filters.sort ? 1 : 0) + (filters.inStock ? 1 : 0)
+  const active = (filters.category ? 1 : 0) + (filters.sort ? 1 : 0)
 
   const option = (selected: boolean) =>
     cn(
@@ -290,15 +287,6 @@ function FilterMenu({
               {c.name} <span className="text-xs text-zinc-500">{counts.get(c.id)}</span>
             </button>
           ))}
-
-          <div className="my-3 border-t border-zinc-800" />
-
-          <button onClick={() => update('inStock', !filters.inStock)} className={option(filters.inStock)} role="switch" aria-checked={filters.inStock}>
-            Solo con stock
-            <span className={cn('flex h-4 w-4 items-center justify-center rounded border', filters.inStock ? 'border-[var(--accent)] bg-[var(--accent)]' : 'border-zinc-600')}>
-              {filters.inStock && <Check size={11} className="text-white" />}
-            </span>
-          </button>
 
           <div className="my-3 border-t border-zinc-800" />
 

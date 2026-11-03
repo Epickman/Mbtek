@@ -22,7 +22,7 @@ const partOf = (category: string) =>
 import { productFitsVehicleType } from '@/data/vehicleBrands'
 import { vehicleDiagrams, type DiagramType } from '@/data/vehicleDiagrams'
 import type { CartItem, Product } from '@/types'
-import { formatPrice, formatStock } from '@/utils/formatPrice'
+import { formatPrice } from '@/utils/formatPrice'
 import { cn } from '@/utils/cn'
 
 export default function PersonalizarClient({ type }: { type: DiagramType | null }) {
@@ -327,24 +327,17 @@ function Customizer({ type }: { type: DiagramType }) {
                               </Link>
                               <p className="mt-0.5 text-xs text-zinc-400">
                                 {formatPrice(product.price)}
-                                {product.stock !== undefined && (
-                                  <span className={cn('ml-2', product.stock === 0 ? 'text-red-400' : 'text-zinc-500')}>
-                                    {formatStock(product.stock)}
-                                  </span>
-                                )}
                               </p>
                             </div>
                             <button
                               onClick={() => {
                                 if (!added) addItem(product)
                               }}
-                              disabled={added || product.stock === 0}
+                              disabled={added}
                               className={cn(
                                 'flex flex-shrink-0 items-center gap-1 rounded-lg border px-3 py-2 text-xs font-bold uppercase transition-colors',
                                 added
                                   ? 'cursor-default border-green-500/40 bg-green-500/10 text-green-300'
-                                  : product.stock === 0
-                                  ? 'cursor-not-allowed border-zinc-800 bg-zinc-900 text-zinc-600'
                                   : 'border-zinc-700 bg-zinc-800 text-zinc-200 hover:border-[var(--accent)] hover:text-white'
                               )}
                               aria-label={added ? `${product.name} ya está en el carrito` : `Agregar ${product.name}`}

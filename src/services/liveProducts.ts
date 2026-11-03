@@ -12,7 +12,8 @@ const DEFAULT_CATEGORY = 'accesorios'
 
 /**
  * Catálogo completo desde Contabilium: cada artículo activo es un producto de la tienda.
- * - Nombre, código, descripción, precio final (con IVA) y stock salen de Contabilium.
+ * - Nombre, código, descripción y precio final (con IVA) salen de Contabilium.
+ *   El stock no se publica: solo se usa para elegir los destacados del inicio.
  * - La categoría sale del rubro de Contabilium si coincide con una de la web
  *   (ej. "Frenos" -> frenos); si no (ej. rubro "General"), de palabras del nombre
  *   (ej. "CANASTA DE EMBRAGUE" -> embrague). Si nada coincide va a Accesorios.
@@ -72,10 +73,9 @@ function toProduct(c: ContabiliumConcepto, rubro: string | undefined, slug: stri
     vehicles: [],
     // Precio 0 en Contabilium = sin precio cargado: se muestra "Consultar precio"
     price: c.PrecioFinal > 0 ? c.PrecioFinal : undefined,
-    stock: c.Stock ?? undefined,
     description: (c.Descripcion || c.Observaciones || '').trim() || defaultDescription(category, c.Codigo),
     specs: Object.keys(specs).length ? specs : undefined,
-    featured: false,
+    featured: (c.Stock ?? 0) > 0,
     tags: rubro ? [rubro] : [],
   }
 }

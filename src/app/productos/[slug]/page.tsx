@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ChevronRight, Package, Tag } from 'lucide-react'
+import { ChevronRight, Tag } from 'lucide-react'
 import { getLiveProducts, getLiveBySlug } from '@/services/liveProducts'
-import { formatPrice, formatStock } from '@/utils/formatPrice'
+import { formatPrice } from '@/utils/formatPrice'
 import { getCategoryById } from '@/data/categories'
 import ProductDetailClient from './ProductDetailClient'
 import ShareButton from './ShareButton'
@@ -83,28 +83,12 @@ export default async function ProductDetailPage({ params }: Props) {
               </h1>
             </div>
 
-            {/* SKU + Stock */}
+            {/* SKU */}
             <div className="flex items-center gap-6 py-4 border-y border-zinc-800">
               <div className="flex items-center gap-2">
                 <Tag size={14} className="text-zinc-500" />
                 <span className="text-zinc-400 text-sm">SKU: <span className="text-white">{product.sku}</span></span>
               </div>
-              {product.stock !== undefined && (
-                <div className="flex items-center gap-2">
-                  <Package size={14} className="text-zinc-500" />
-                  <span
-                    className={
-                      product.stock === 0
-                        ? 'text-red-400 text-sm'
-                        : product.stock <= 3
-                        ? 'text-amber-400 text-sm'
-                        : 'text-green-400 text-sm'
-                    }
-                  >
-                    {formatStock(product.stock)}
-                  </span>
-                </div>
-              )}
             </div>
 
             {/* Compatibility */}

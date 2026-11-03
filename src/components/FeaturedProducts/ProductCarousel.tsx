@@ -114,7 +114,7 @@ export default function ProductCarousel({ products }: { products: Product[] }) {
       onTouchEnd={resume}
       onClickCapture={onClickCapture}
       onDragStart={(e) => e.preventDefault()}
-      aria-label="Productos en stock"
+      aria-label="Productos destacados"
       role="region"
     >
       {row(0)}

@@ -23,11 +23,6 @@ type Action =
 
 // ── State / Reducer ───────────────────────────────────────────────────────────
 
-/** Tope de unidades que se pueden pedir de un producto (sin stock informado no hay tope) */
-export function maxQty(product: Product): number {
-  return product.stock ?? Infinity
-}
-
 const initialState: CartState = {
   items: [],
 }
@@ -35,14 +30,13 @@ const initialState: CartState = {
 function reducer(state: CartState, action: Action): CartState {
   switch (action.type) {
     case 'ADD_ITEM': {
-      if (maxQty(action.product) <= 0) return state
       const existing = state.items.find((i) => i.product.id === action.product.id)
       if (existing) {
         return {
           ...state,
           items: state.items.map((i) =>
             i.product.id === action.product.id
-              ? { ...i, quantity: Math.min(i.quantity + (action.quantity ?? 1), maxQty(action.product)) }
+              ? { ...i, quantity: i.quantity + (action.quantity ?? 1) }
               : i
           ),
         }
@@ -51,7 +45,7 @@ function reducer(state: CartState, action: Action): CartState {
         ...state,
         items: [
           ...state.items,
-          { product: action.product, quantity: Math.min(action.quantity ?? 1, maxQty(action.product)) },
+          { product: action.product, quantity: action.quantity ?? 1 },
         ],
       }
     }
@@ -137,7 +131,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [state])
 
   // El carrito guarda una copia del producto al agregarlo; se reemplaza por la versión actual
-  // del catálogo para que precio, stock y fotos estén siempre al día.
+  // del catálogo para que precio y fotos estén siempre al día.
   const catalog = useProducts()
   const freshState: CartState = {
     ...state,
@@ -152,17 +146,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const value: CartContextValue = {
     state: freshState,
     addItem: (product, quantity = 1) => {
-      if (maxQty(product) <= 0) return
       dispatch({ type: 'ADD_ITEM', product, quantity })
       setLastAdded({ product, quantity, key: Date.now() })
     },
     removeItem: (productId) => dispatch({ type: 'REMOVE_ITEM', productId }),
-    updateQty: (productId, quantity) => {
-      // El tope sale del catálogo actualizado, no de la copia guardada en el carrito
-      const item = freshState.items.find((i) => i.product.id === productId)
-      const capped = item ? Math.min(quantity, maxQty(item.product)) : quantity
-      dispatch({ type: 'UPDATE_QTY', productId, quantity: capped })
-    },
+    updateQty: (productId, quantity) => dispatch({ type: 'UPDATE_QTY', productId, quantity }),
     clear: () => dispatch({ type: 'CLEAR' }),
     totalItems: freshState.items.reduce((sum, i) => sum + i.quantity, 0),
     subtotal: freshState.items.reduce((sum, i) => sum + (i.product.price ?? 0) * i.quantity, 0),

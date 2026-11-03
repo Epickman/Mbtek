@@ -11,7 +11,6 @@ export interface ProductVariant {
   sku: string
   name: string
   price?: number
-  stock?: number
 }
 
 export interface Product {
@@ -23,7 +22,6 @@ export interface Product {
   subcategory?: string
   vehicles: string[] // e.g. ['yamaha-raptor-700', 'yamaha-yfz450r']
   price?: number
-  stock?: number
   description: string
   specs?: Record<string, string>
   featured?: boolean

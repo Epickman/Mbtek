@@ -7,8 +7,7 @@ import Reveal from '@/components/ui/Reveal'
 const SLOTS = 14
 
 export default async function FeaturedProducts() {
-  // Solo los que tienen stock en Contabilium
-  const featured = (await getLiveProducts()).filter((p) => (p.stock ?? 0) > 0).slice(0, SLOTS)
+  const featured = (await getLiveProducts()).filter((p) => p.featured).slice(0, SLOTS)
   if (featured.length === 0) return null
 
   return (
@@ -16,9 +15,9 @@ export default async function FeaturedProducts() {
       <div className="max-w-screen-xl mx-auto px-4">
         {/* Editorial header */}
         <Reveal className="mb-[clamp(30px,5vw,54px)] text-center">
-          <div className="mb-eyebrow"><span>Destacados</span></div>
+          <div className="mb-eyebrow"><span>Tienda</span></div>
           <h2 id="featured-heading" className="mb-title">
-            Productos <span className="accent">en stock</span>
+            Productos <span className="accent">destacados</span>
           </h2>
         </Reveal>
 

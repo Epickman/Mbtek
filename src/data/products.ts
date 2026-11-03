@@ -12,7 +12,6 @@ export const products: Product[] = [
     category: 'suspension',
     vehicles: ['yamaha-raptor-700', 'yamaha-yfz450r'],
     price: undefined, // Set when available
-    stock: undefined,
     description:
       'Amortiguadores delanteros de alto rendimiento. Compatibles con parrillas estándar y aftermarket. Ajuste de compresión y rebote.',
     specs: {
@@ -31,7 +30,6 @@ export const products: Product[] = [
     category: 'admision',
     vehicles: ['yamaha-yfz450r', 'yamaha-raptor-700'],
     price: undefined,
-    stock: undefined,
     description:
       'Kit completo de filtro de aire de alto flujo. Mayor rendimiento en condiciones de barro y polvo.',
     featured: true,
@@ -45,7 +43,6 @@ export const products: Product[] = [
     category: 'embrague',
     vehicles: ['yamaha-yfz450r'],
     price: undefined,
-    stock: undefined,
     description:
       'Kit de discos, resortes y separadores de embrague para mayor durabilidad en condiciones extremas.',
     featured: false,
@@ -59,7 +56,6 @@ export const products: Product[] = [
     category: 'escape',
     vehicles: ['yamaha-yfz450r', 'yamaha-raptor-700'],
     price: undefined,
-    stock: undefined,
     description:
       'Sistema de escape completo de alta performance. Mayor potencia y torque en toda la curva.',
     featured: true,
@@ -73,7 +69,6 @@ export const products: Product[] = [
     category: 'motor',
     vehicles: ['yamaha-yfz450r'],
     price: undefined,
-    stock: undefined,
     description:
       'Mangueras de radiador de silicona CV4. Resistencia extrema al calor y presión.',
     featured: false,
@@ -87,7 +82,6 @@ export const products: Product[] = [
     category: 'embrague',
     vehicles: ['yamaha-yfz450r'],
     price: undefined,
-    stock: undefined,
     description:
       'Centro de embrague en aluminio billet. Mayor disipación de calor y durabilidad en uso intensivo.',
     featured: false,
@@ -101,7 +95,6 @@ export const products: Product[] = [
     category: 'ruedas',
     vehicles: ['yamaha-raptor-700', 'yamaha-yfz450f'],
     price: undefined,
-    stock: undefined,
     description:
       'Parrillas DC-4 para uso off-road extremo. Mayor ancho de vía y estabilidad.',
     featured: true,
@@ -115,7 +108,6 @@ export const products: Product[] = [
     category: 'frenos',
     vehicles: ['yamaha-yfz450r'],
     price: undefined,
-    stock: undefined,
     description:
       'Manija integrada con bomba de freno de radial. Control y feel de freno mejorado.',
     featured: false,
@@ -129,7 +121,6 @@ export const products: Product[] = [
     category: 'proteccion',
     vehicles: ['yamaha-raptor-700'],
     price: undefined,
-    stock: undefined,
     description:
       'Soporte y protector de disco trasero en billet de aluminio. Protección total para uso en barro y piedra.',
     featured: false,
@@ -143,7 +134,6 @@ export const products: Product[] = [
     category: 'motor',
     vehicles: ['yamaha-yfz450r'],
     price: undefined,
-    stock: undefined,
     description:
       'ECU de alto rendimiento programable. Mapas de ignición y combustible optimizados para cada configuración.',
     featured: true,

@@ -9,10 +9,3 @@ export function formatPrice(price: number | undefined | null): string {
     maximumFractionDigits: 0,
   }).format(price)
 }
-
-export function formatStock(stock: number | undefined | null): string {
-  if (stock == null) return ''
-  if (stock === 0) return 'Sin stock'
-  if (stock <= 3) return `Últimas ${stock} unidades`
-  return 'En stock'
-}

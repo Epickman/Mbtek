@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import ProductActions from './ProductActions'
-import { formatPrice, formatStock } from '@/utils/formatPrice'
+import { formatPrice } from '@/utils/formatPrice'
 import { getCategoryById } from '@/data/categories'
 import type { Product } from '@/types'
 import { cn } from '@/utils/cn'
@@ -67,16 +67,6 @@ export default function ProductCard({ product, className, size = 'default' }: Pr
             <span className={cn('text-white font-bold', small ? 'text-base' : 'text-xl')}>
               {formatPrice(product.price)}
             </span>
-            {product.stock !== undefined && (
-              <span
-                className={cn(
-                  'text-xs font-medium',
-                  product.stock === 0 ? 'text-red-400' : product.stock <= 3 ? 'text-amber-400' : 'text-green-400'
-                )}
-              >
-                {formatStock(product.stock)}
-              </span>
-            )}
           </div>
         </div>
       </Link>
