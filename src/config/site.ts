@@ -6,7 +6,7 @@ const siteConfig = {
   tagline: 'ATV & MX Performance Parts',
 
   // Contact
-  whatsapp: '5492215762430', // +54 9 221 576-2430 (el 9 es obligatorio para celulares de Argentina en WhatsApp)
+  whatsapp: '5491173430395', // +54 9 11 7343-0395 (el 9 es obligatorio para celulares de Argentina en WhatsApp)
   whatsappName: 'MBTEK Parts',
   instagram: 'mbtek_parts',
   email: 'info@mbtekparts.com.ar',
