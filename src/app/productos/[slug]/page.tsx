@@ -7,6 +7,7 @@ import { formatPrice } from '@/utils/formatPrice'
 import { getCategoryById } from '@/data/categories'
 import ProductDetailClient from './ProductDetailClient'
 import ShareButton from './ShareButton'
+import ProductImage from '@/components/ProductCard/ProductImage'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -24,6 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: product.name,
     description: product.description,
+    openGraph: product.image ? { images: [product.image] } : undefined,
   }
 }
 
@@ -67,7 +69,13 @@ export default async function ProductDetailPage({ params }: Props) {
           </ol>
         </nav>
 
-        <div className="max-w-3xl">
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
+          <ProductImage
+            product={product}
+            sizes="(min-width: 1280px) 600px, (min-width: 1024px) 50vw, 100vw"
+            preload
+            className="self-start rounded-2xl border border-zinc-800"
+          />
           <div className="flex flex-col gap-6">
             <div>
               <div className="mb-4 flex items-center justify-between gap-4">
@@ -106,9 +114,11 @@ export default async function ProductDetailPage({ params }: Props) {
             )}
 
             {/* Price */}
-            <div>
-              <p className="text-3xl font-black text-white">{formatPrice(product.price)}</p>
-            </div>
+            {product.price != null && (
+              <div>
+                <p className="text-3xl font-black text-white">{formatPrice(product.price)}</p>
+              </div>
+            )}
 
             {/* Description */}
             <p className="text-zinc-300 text-base leading-relaxed">{product.description}</p>
@@ -151,7 +161,7 @@ export default async function ProductDetailPage({ params }: Props) {
                     {p.name}
                   </h3>
                   {p.description && <p className="mt-2 line-clamp-2 text-xs text-zinc-400">{p.description}</p>}
-                  <p className="text-white font-bold text-sm mt-2">{formatPrice(p.price)}</p>
+                  {p.price != null && <p className="text-white font-bold text-sm mt-2">{formatPrice(p.price)}</p>}
                 </Link>
               ))}
             </div>

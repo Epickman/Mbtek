@@ -13,6 +13,9 @@ const siteConfig = {
   website: 'https://www.mbtekparts.com.ar',
 
   // Commerce
+  // false = la web no muestra precios: no aparece ni el precio ni "Consultar precio" (los precios siguen en
+  // src/data/catalogo.json). Poner true para volver a mostrarlos.
+  showPrices: false,
   currency: 'ARS',
   currencySymbol: '$',
 

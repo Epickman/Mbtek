@@ -44,7 +44,8 @@ export default function CartToast() {
                 {lastAdded.product.name}
               </p>
               <p className="mt-0.5 text-xs text-zinc-500">
-                {totalItems} producto{totalItems !== 1 ? 's' : ''} · Subtotal {formatPrice(subtotal)}
+                {totalItems} producto{totalItems !== 1 ? 's' : ''}
+                {subtotal > 0 && ` · Subtotal ${formatPrice(subtotal)}`}
               </p>
             </div>
             <button

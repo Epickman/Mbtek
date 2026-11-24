@@ -1,0 +1,1127 @@
+[
+  {
+    "sku": "101010001",
+    "nombre": "Rodamiento Carrier (2) YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "933042081200",
+    "descripcion": "",
+    "precio": 126169
+  },
+  {
+    "sku": "101010002",
+    "nombre": "Espaciador Carrier Yfz450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "5TG253170100",
+    "descripcion": "",
+    "precio": 54687
+  },
+  {
+    "sku": "101010003",
+    "nombre": "Selectora de Cambios YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P181010000",
+    "descripcion": "",
+    "precio": 90356
+  },
+  {
+    "sku": "101010004",
+    "nombre": "Cable Embrague YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P26335000",
+    "descripcion": "",
+    "precio": 82046
+  },
+  {
+    "sku": "101010005",
+    "nombre": "Cable acelerador YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P26311000",
+    "descripcion": "",
+    "precio": 42252
+  },
+  {
+    "sku": "101010006",
+    "nombre": "Junta Tapa Cilindro YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "2S211181000",
+    "descripcion": "",
+    "precio": 43394
+  },
+  {
+    "sku": "101010007",
+    "nombre": "Junta Base Cilindro YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "2S211351000",
+    "descripcion": "",
+    "precio": 22408
+  },
+  {
+    "sku": "101010008",
+    "nombre": "Rodamiento Balanceador (2) YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "933062035300",
+    "descripcion": "",
+    "precio": 37959
+  },
+  {
+    "sku": "101010009",
+    "nombre": "Rodamiento Bancada (2) YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "933063064400",
+    "descripcion": "",
+    "precio": 68394
+  },
+  {
+    "sku": "101010010",
+    "nombre": "Biela YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P116510000",
+    "descripcion": "",
+    "precio": 101336
+  },
+  {
+    "sku": "101010011",
+    "nombre": "Jaula YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "933107360900",
+    "descripcion": "",
+    "precio": 136705
+  },
+  {
+    "sku": "101010012",
+    "nombre": "Muñon YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P116810100",
+    "descripcion": "",
+    "precio": 160113
+  },
+  {
+    "sku": "101010013",
+    "nombre": "Kit Piston YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "999990352800",
+    "descripcion": "",
+    "precio": 204763
+  },
+  {
+    "sku": "101010014",
+    "nombre": "Aros Piston YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "5TG116030000",
+    "descripcion": "",
+    "precio": 46320
+  },
+  {
+    "sku": "101010015",
+    "nombre": "ENGR 2DA 15T",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P171210000",
+    "descripcion": "",
+    "precio": 56604
+  },
+  {
+    "sku": "101010016",
+    "nombre": "ENGR 3RA 19T",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P171310000",
+    "descripcion": "",
+    "precio": 88627
+  },
+  {
+    "sku": "101010017",
+    "nombre": "ENGR 4TA 21 T",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P171410000",
+    "descripcion": "",
+    "precio": 124246
+  },
+  {
+    "sku": "101010018",
+    "nombre": "ENGR 5TA 21 T",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P171510000",
+    "descripcion": "",
+    "precio": 107774
+  },
+  {
+    "sku": "101010019",
+    "nombre": "ENGR 2DA 30T",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P172210000",
+    "descripcion": "",
+    "precio": 126085
+  },
+  {
+    "sku": "101010020",
+    "nombre": "ENGR 3RA 31T",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P172310000",
+    "descripcion": "",
+    "precio": 113460
+  },
+  {
+    "sku": "101010021",
+    "nombre": "ENGR 4TA 28T",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P172410000",
+    "descripcion": "",
+    "precio": 122239
+  },
+  {
+    "sku": "101010022",
+    "nombre": "ENGR 5TA 23T",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P172510000",
+    "descripcion": "",
+    "precio": 131603
+  },
+  {
+    "sku": "101010023",
+    "nombre": "ENGR 1ERA 35T",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P172110000",
+    "descripcion": "",
+    "precio": 201251
+  },
+  {
+    "sku": "101010024",
+    "nombre": "Piñon 14T YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P174600000",
+    "descripcion": "",
+    "precio": 89129
+  },
+  {
+    "sku": "101010025",
+    "nombre": "Rodamiento Caja Eje Embrague YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "933062053200",
+    "descripcion": "",
+    "precio": 54347
+  },
+  {
+    "sku": "101010026",
+    "nombre": "Rodamiento Caja Eje Embrague YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "933062033200",
+    "descripcion": "",
+    "precio": 27675
+  },
+  {
+    "sku": "101010027",
+    "nombre": "Rodamiento Caja eje piñon YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "933060042600",
+    "descripcion": "",
+    "precio": 40468
+  },
+  {
+    "sku": "101010028",
+    "nombre": "Rodamiento Caja eje piñon YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "933062780300",
+    "descripcion": "",
+    "precio": 78427
+  },
+  {
+    "sku": "101010029",
+    "nombre": "Junta Embrague YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P154530000",
+    "descripcion": "",
+    "precio": 17475
+  },
+  {
+    "sku": "101010030",
+    "nombre": "Junta Carter YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P154620000",
+    "descripcion": "",
+    "precio": 16806
+  },
+  {
+    "sku": "101010031",
+    "nombre": "Junta Tapa chica encendido YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P154630000",
+    "descripcion": "",
+    "precio": 7692
+  },
+  {
+    "sku": "101010032",
+    "nombre": "Junta Encendido YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P154510000",
+    "descripcion": "",
+    "precio": 11538
+  },
+  {
+    "sku": "101010033",
+    "nombre": "Pistón CP MX1026",
+    "rubro": "Repuesto",
+    "marca": "CP Carrillo",
+    "codigoProveedor": "MX1026",
+    "descripcion": "",
+    "precio": 468000
+  },
+  {
+    "sku": "101010034",
+    "nombre": "Pistón CP MX1P26-P",
+    "rubro": "Repuesto",
+    "marca": "CP Carrillo",
+    "codigoProveedor": "MX1P26-P",
+    "descripcion": "",
+    "precio": 591868
+  },
+  {
+    "sku": "101010035",
+    "nombre": "Pistón CP MX1P27-P",
+    "rubro": "Repuesto",
+    "marca": "CP Carrillo",
+    "codigoProveedor": "MX1P27-P",
+    "descripcion": "",
+    "precio": 635554
+  },
+  {
+    "sku": "101010036",
+    "nombre": "BIELA CP Largo Stock",
+    "rubro": "Repuesto",
+    "marca": "CP Carrillo",
+    "codigoProveedor": "PSR8808A",
+    "descripcion": "",
+    "precio": 536017
+  },
+  {
+    "sku": "101010037",
+    "nombre": "BIELA CP +3",
+    "rubro": "Repuesto",
+    "marca": "CP Carrillo",
+    "codigoProveedor": "PSR8802A",
+    "descripcion": "",
+    "precio": 591315
+  },
+  {
+    "sku": "101010038",
+    "nombre": "Bomba Nafta YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P139071200",
+    "descripcion": "",
+    "precio": 881683
+  },
+  {
+    "sku": "101010039",
+    "nombre": "Cubre Carter YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P214710000",
+    "descripcion": "",
+    "precio": 100000
+  },
+  {
+    "sku": "101010040",
+    "nombre": "Bulon Horquillon/motor YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P221410000",
+    "descripcion": "",
+    "precio": 126922
+  },
+  {
+    "sku": "101010041",
+    "nombre": "Estator YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P814100000",
+    "descripcion": "",
+    "precio": 415479
+  },
+  {
+    "sku": "101010042",
+    "nombre": "Burro Arranque OEM",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P818900000",
+    "descripcion": "",
+    "precio": 792818
+  },
+  {
+    "sku": "101010043",
+    "nombre": "Inyector OEM",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "3B4137610000",
+    "descripcion": "",
+    "precio": 349707
+  },
+  {
+    "sku": "101010044",
+    "nombre": "Valvula Admisión x1 YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "5TA121110000",
+    "descripcion": "",
+    "precio": 248400
+  },
+  {
+    "sku": "101010045",
+    "nombre": "Valvula Admisión x2 YFZ450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "5TA121120000",
+    "descripcion": "",
+    "precio": 248577
+  },
+  {
+    "sku": "101010046",
+    "nombre": "Valvula Escape OEM YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "5TA121210000",
+    "descripcion": "",
+    "precio": 299196
+  },
+  {
+    "sku": "101010047",
+    "nombre": "Carrier YFZ450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "5TG253112100",
+    "descripcion": "",
+    "precio": 515218
+  },
+  {
+    "sku": "101010048",
+    "nombre": "Cadena Distribución YFZ 450R",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "945915712000",
+    "descripcion": "",
+    "precio": 82321
+  },
+  {
+    "sku": "101010049",
+    "nombre": "Tuerca Rueda",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "957041050000",
+    "descripcion": "",
+    "precio": 644
+  },
+  {
+    "sku": "101010050",
+    "nombre": "Kit Rodamientos Maza Delantera OEM",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "1PEWB0240000",
+    "descripcion": "",
+    "precio": 125938
+  },
+  {
+    "sku": "101010051",
+    "nombre": "Manubrio Raptor",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "1S3261112000",
+    "descripcion": "",
+    "precio": 172715
+  },
+  {
+    "sku": "101010052",
+    "nombre": "Rotula Parrilla OEM",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "5LP235790000",
+    "descripcion": "",
+    "precio": 85659
+  },
+  {
+    "sku": "101010053",
+    "nombre": "Arandela Seguridad Embrague YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "902152000500",
+    "descripcion": "",
+    "precio": 6353
+  },
+  {
+    "sku": "101010054",
+    "nombre": "Arandela Seguridad Balanceador YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "902151428700",
+    "descripcion": "",
+    "precio": 4500
+  },
+  {
+    "sku": "101010055",
+    "nombre": "Roza Cadena Yfz 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P221511000",
+    "descripcion": "",
+    "precio": 54500
+  },
+  {
+    "sku": "101010056",
+    "nombre": "Transbalador de caja Yfz 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P1854100",
+    "descripcion": "",
+    "precio": 245372
+  },
+  {
+    "sku": "101010057",
+    "nombre": "Horquilla Caja 2 Yfz 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P1851200",
+    "descripcion": "",
+    "precio": 98474
+  },
+  {
+    "sku": "101010058",
+    "nombre": "Junta Tapa Valvula Original Yfz 450r",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "2S2111930000",
+    "descripcion": "",
+    "precio": 29500
+  },
+  {
+    "sku": "101010059",
+    "nombre": "Disco Embrague",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "5TA1632100",
+    "descripcion": "",
+    "precio": 12900
+  },
+  {
+    "sku": "101010060",
+    "nombre": "Discos Embrague",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "5VY1632100",
+    "descripcion": "",
+    "precio": 22500
+  },
+  {
+    "sku": "101010061",
+    "nombre": "Cable Acelerador YFZ Carburador",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "5TG263110000",
+    "descripcion": "",
+    "precio": 44500
+  },
+  {
+    "sku": "101010062",
+    "nombre": "Acelerador Suzuki",
+    "rubro": "Repuesto",
+    "marca": "Suzuki",
+    "codigoProveedor": "",
+    "descripcion": "",
+    "precio": 180000
+  },
+  {
+    "sku": "101010063",
+    "nombre": "Tapa de Cilindro",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "1TD111010900",
+    "descripcion": "",
+    "precio": 1800000
+  },
+  {
+    "sku": "101010064",
+    "nombre": "Canasta Embrague 8R",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P161500000",
+    "descripcion": "",
+    "precio": 850000
+  },
+  {
+    "sku": "101010065",
+    "nombre": "Cilindro OEM",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "2S2113111100",
+    "descripcion": "",
+    "precio": 914500
+  },
+  {
+    "sku": "101010066",
+    "nombre": "Canasta Embrague 3R",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "",
+    "descripcion": "",
+    "precio": 0
+  },
+  {
+    "sku": "101010067",
+    "nombre": "Cigüeñal completo",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P114000200",
+    "descripcion": "",
+    "precio": 1400000
+  },
+  {
+    "sku": "101010068",
+    "nombre": "Electroventilador",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "1TDE24050000",
+    "descripcion": "",
+    "precio": 472750
+  },
+  {
+    "sku": "101010069",
+    "nombre": "Torrington Balanceador",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "933116257400",
+    "descripcion": "",
+    "precio": 79477
+  },
+  {
+    "sku": "101010070",
+    "nombre": "Engranaje 5ta Secundario",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P172510000",
+    "descripcion": "",
+    "precio": 132658
+  },
+  {
+    "sku": "101010071",
+    "nombre": "Engranaje Bomba de Aceite",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P133410000",
+    "descripcion": "",
+    "precio": 63632
+  },
+  {
+    "sku": "101010072",
+    "nombre": "Horquilla 1",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P185110000",
+    "descripcion": "",
+    "precio": 145443
+  },
+  {
+    "sku": "101010073",
+    "nombre": "Horquilla 2",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P185120000",
+    "descripcion": "",
+    "precio": 100265
+  },
+  {
+    "sku": "101010074",
+    "nombre": "Horquilla 3",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P185130000",
+    "descripcion": "",
+    "precio": 145443
+  },
+  {
+    "sku": "101010075",
+    "nombre": "Eje de engranaje Bomba de aceite",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "2S2133420000",
+    "descripcion": "",
+    "precio": 45532
+  },
+  {
+    "sku": "101010076",
+    "nombre": "Cuerpo Bomba de Aceite",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P133000000",
+    "descripcion": "",
+    "precio": 233913
+  },
+  {
+    "sku": "101010077",
+    "nombre": "Reten Bomba de Aceite",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "5TA133200000",
+    "descripcion": "",
+    "precio": 64524
+  },
+  {
+    "sku": "101010078",
+    "nombre": "Reten Válvula Admisión",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "33M121190000",
+    "descripcion": "",
+    "precio": 4247
+  },
+  {
+    "sku": "101010079",
+    "nombre": "Reten Válvula Escape",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "4SV121190000",
+    "descripcion": "",
+    "precio": 2697
+  },
+  {
+    "sku": "101010080",
+    "nombre": "Biela OEM",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "1TD116510000",
+    "descripcion": "",
+    "precio": 184016
+  },
+  {
+    "sku": "101010081",
+    "nombre": "Cubo/Centro Embrague",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "5TA163712000",
+    "descripcion": "",
+    "precio": 298082
+  },
+  {
+    "sku": "101010082",
+    "nombre": "Reten de Cigueñal",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "931011416400",
+    "descripcion": "",
+    "precio": 8257
+  },
+  {
+    "sku": "101010083",
+    "nombre": "Reten Presión de Aceite",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "583131130000",
+    "descripcion": "",
+    "precio": 10852
+  },
+  {
+    "sku": "101010084",
+    "nombre": "Corona Transmisión 18d",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "5TG254381000",
+    "descripcion": "",
+    "precio": 84000
+  },
+  {
+    "sku": "101010085",
+    "nombre": "Piñon 14T",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "18P174600000",
+    "descripcion": "",
+    "precio": 89200
+  },
+  {
+    "sku": "101010086",
+    "nombre": "CADENA RK 520KLO2x120 ORING DORADA CLIP",
+    "rubro": "Repuesto",
+    "marca": "RK",
+    "codigoProveedor": "520KLO2x120GS-CL",
+    "descripcion": "",
+    "precio": 139983
+  },
+  {
+    "sku": "101010087",
+    "nombre": "CADENA RK 520KXZx120 OFF ROAD SPORT DORADA CLIP",
+    "rubro": "Repuesto",
+    "marca": "RK",
+    "codigoProveedor": "Código 520KXZx120GB-CL",
+    "descripcion": "",
+    "precio": 155686
+  },
+  {
+    "sku": "103010088",
+    "nombre": "CUELLO AIR LITE ATLAS CUELLO PROTECTOR CERVICAL",
+    "rubro": "Repuesto",
+    "marca": "Atlas",
+    "codigoProveedor": "AL4-01-010",
+    "descripcion": "",
+    "precio": 275000
+  },
+  {
+    "sku": "101010089",
+    "nombre": "Plato Tapa Embrague",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "2S2163510100",
+    "descripcion": "",
+    "precio": 170000
+  },
+  {
+    "sku": "101010090",
+    "nombre": "Kit Embrague Hinson",
+    "rubro": "Repuesto",
+    "marca": "Hinson",
+    "codigoProveedor": "HC316",
+    "descripcion": "",
+    "precio": 1705000
+  },
+  {
+    "sku": "101010091",
+    "nombre": "Canasta Embrague 8 R Hinson",
+    "rubro": "Repuesto",
+    "marca": "Hinson",
+    "codigoProveedor": "H316",
+    "descripcion": "",
+    "precio": 550000
+  },
+  {
+    "sku": "101010092",
+    "nombre": "Hot Cam 3 Admisión YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Hot Cam",
+    "codigoProveedor": "4302-3IN",
+    "descripcion": "",
+    "precio": 506000
+  },
+  {
+    "sku": "101010093",
+    "nombre": "Hot Cam 3 Escape YFZ 450r",
+    "rubro": "Repuesto",
+    "marca": "Hot Cam",
+    "codigoProveedor": "4303-3E",
+    "descripcion": "",
+    "precio": 506000
+  },
+  {
+    "sku": "101010094",
+    "nombre": "Punta de eje (kit) - Lonestar",
+    "rubro": "Repuesto",
+    "marca": "Loenestar",
+    "codigoProveedor": "10-382",
+    "descripcion": "",
+    "precio": 350000
+  },
+  {
+    "sku": "103010095",
+    "nombre": "Antiparras 100% Accuri 2",
+    "rubro": "Indumentaria",
+    "marca": "100%",
+    "codigoProveedor": "Accuri 2",
+    "descripcion": "",
+    "precio": 95000
+  },
+  {
+    "sku": "101010096",
+    "nombre": "Pivot Works Columna Pivot Works",
+    "rubro": "Repuesto",
+    "marca": "Pivot Works",
+    "codigoProveedor": "PWSSK-Y09-000",
+    "descripcion": "",
+    "precio": 75000
+  },
+  {
+    "sku": "101010097",
+    "nombre": "Kit Reparaci Horquillon Pivot Works",
+    "rubro": "Repuesto",
+    "marca": "Pivot Works",
+    "codigoProveedor": "PWSAK-Y29-450",
+    "descripcion": "",
+    "precio": 250000
+  },
+  {
+    "sku": "101010098",
+    "nombre": "Kit Reparación Bieleta/Linkage Pivot Works",
+    "rubro": "Repuesto",
+    "marca": "Pivot Works",
+    "codigoProveedor": "PWLK-Y15-450",
+    "descripcion": "",
+    "precio": 280000
+  },
+  {
+    "sku": "101010099",
+    "nombre": "Corona Transmisión JT - 38d",
+    "rubro": "Repuesto",
+    "marca": "JT",
+    "codigoProveedor": "JTR1857.38",
+    "descripcion": "",
+    "precio": 70000
+  },
+  {
+    "sku": "101010100",
+    "nombre": "Corona Transmisión JT - 39d",
+    "rubro": "Repuesto",
+    "marca": "JT",
+    "codigoProveedor": "JTR1857.38",
+    "descripcion": "",
+    "precio": 70000
+  },
+  {
+    "sku": "101010101",
+    "nombre": "Piñon JT - 14d",
+    "rubro": "Repuesto",
+    "marca": "JT",
+    "codigoProveedor": "JTF1592.14RD",
+    "descripcion": "",
+    "precio": 33000
+  },
+  {
+    "sku": "103010102",
+    "nombre": "Antiparras 100% Armega",
+    "rubro": "Indumentaria",
+    "marca": "100%",
+    "codigoProveedor": "Armega",
+    "descripcion": "",
+    "precio": 155000
+  },
+  {
+    "sku": "103010103",
+    "nombre": "Pechera Alpinestar Tech Air",
+    "rubro": "Indumentaria",
+    "marca": "Alpinestar",
+    "codigoProveedor": "6500626",
+    "descripcion": "",
+    "precio": 1350000
+  },
+  {
+    "sku": "103010104",
+    "nombre": "Kit Inflador Pecheraa",
+    "rubro": "Indumentaria",
+    "marca": "Alpinestar",
+    "codigoProveedor": "6991126",
+    "descripcion": "",
+    "precio": 220000
+  },
+  {
+    "sku": "101010105",
+    "nombre": "Filtro Aceite Hiflo",
+    "rubro": "Repuesto",
+    "marca": "Hi Flo",
+    "codigoProveedor": "HF 140",
+    "descripcion": "",
+    "precio": 10000
+  },
+  {
+    "sku": "102010106",
+    "nombre": "Aceite Syn Blend 10W 40",
+    "rubro": "Repuesto",
+    "marca": "Maxima",
+    "codigoProveedor": "34901B",
+    "descripcion": "",
+    "precio": 18200
+  },
+  {
+    "sku": "102010107",
+    "nombre": "Tablero Digital Vapor",
+    "rubro": "Accesorio",
+    "marca": "Vapor",
+    "codigoProveedor": "752-114",
+    "descripcion": "",
+    "precio": 330000
+  },
+  {
+    "sku": "102010108",
+    "nombre": "Mazas Winen Motorsports",
+    "rubro": "Repuesto",
+    "marca": "Winenmotorsports",
+    "codigoProveedor": "",
+    "descripcion": "",
+    "precio": 1248000
+  },
+  {
+    "sku": "101010109",
+    "nombre": "Kit Resortes Válvulas Ferrea",
+    "rubro": "Repuesto",
+    "marca": "Ferrea",
+    "codigoProveedor": "Ferrea",
+    "descripcion": "",
+    "precio": 458200
+  },
+  {
+    "sku": "103010110",
+    "nombre": "Casco Alpinestar SM10",
+    "rubro": "Indumentaria",
+    "marca": "Alpinestar",
+    "codigoProveedor": "SM10",
+    "descripcion": "",
+    "precio": 0
+  },
+  {
+    "sku": "103010111",
+    "nombre": "Rodillera Alpinestar RK 7",
+    "rubro": "Indumentaria",
+    "marca": "Alpinestar",
+    "codigoProveedor": "RK 7",
+    "descripcion": "",
+    "precio": 0
+  },
+  {
+    "sku": "103010112",
+    "nombre": "Pechera Alpinestar A 5 Plasma",
+    "rubro": "Indumentaria",
+    "marca": "Alpinestar",
+    "codigoProveedor": "A5 Plasma",
+    "descripcion": "",
+    "precio": 0
+  },
+  {
+    "sku": "101010113",
+    "nombre": "Kit Válvulas + 1 Admisión +1 Escape DW",
+    "rubro": "Repuesto",
+    "marca": "DelWest",
+    "codigoProveedor": "",
+    "descripcion": "",
+    "precio": 1248200
+  },
+  {
+    "sku": "101010114",
+    "nombre": "Kit Válvulas + 1 Admisión +2 Escape DW",
+    "rubro": "Repuesto",
+    "marca": "DelWest",
+    "codigoProveedor": "",
+    "descripcion": "",
+    "precio": 1248200
+  },
+  {
+    "sku": "101010115",
+    "nombre": "Pistón CP M100-P",
+    "rubro": "Repuesto",
+    "marca": "CP Carrillo",
+    "codigoProveedor": "M1000-P",
+    "descripcion": "",
+    "precio": 0
+  },
+  {
+    "sku": "101010116",
+    "nombre": "Pistón CP M1000",
+    "rubro": "Repuesto",
+    "marca": "CP Carrillo",
+    "codigoProveedor": "M1000",
+    "descripcion": "",
+    "precio": 0
+  },
+  {
+    "sku": "101010117",
+    "nombre": "Pistón CP MX1P26",
+    "rubro": "Repuesto",
+    "marca": "CP Carrillo",
+    "codigoProveedor": "MX1P26",
+    "descripcion": "",
+    "precio": 0
+  },
+  {
+    "sku": "101010118",
+    "nombre": "Bujia",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "NGKCR8E00000",
+    "descripcion": "",
+    "precio": 23220
+  },
+  {
+    "sku": "101010119",
+    "nombre": "Rotor Bomba de Aceite",
+    "rubro": "Repuesto",
+    "marca": "Yamaha",
+    "codigoProveedor": "5TA133200000",
+    "descripcion": "",
+    "precio": 80000
+  },
+  {
+    "sku": "103010120",
+    "nombre": "Casco FOX V1",
+    "rubro": "Indumentaria",
+    "marca": "FOX",
+    "codigoProveedor": "V1",
+    "descripcion": "",
+    "precio": 0
+  },
+  {
+    "sku": "103010121",
+    "nombre": "Casco Fox V3",
+    "rubro": "Indumentaria",
+    "marca": "FOX",
+    "codigoProveedor": "V3",
+    "descripcion": "",
+    "precio": 0
+  },
+  {
+    "sku": "103010122",
+    "nombre": "Casco Fox V3 RS",
+    "rubro": "Indumentaria",
+    "marca": "FOX",
+    "codigoProveedor": "V3 RS",
+    "descripcion": "",
+    "precio": 0
+  },
+  {
+    "sku": "103010123",
+    "nombre": "Guantes Fox Dirtpaw",
+    "rubro": "Indumentaria",
+    "marca": "FOX",
+    "codigoProveedor": "DirtPaw",
+    "descripcion": "",
+    "precio": 0
+  },
+  {
+    "sku": "103010124",
+    "nombre": "Gorra FOX",
+    "rubro": "Indumentaria",
+    "marca": "FOX",
+    "codigoProveedor": "",
+    "descripcion": "",
+    "precio": 0
+  },
+  {
+    "sku": "102010125",
+    "nombre": "Escapa RP Shorty YFZ450r",
+    "rubro": "Accesorio",
+    "marca": "RP Race",
+    "codigoProveedor": "Shorty",
+    "descripcion": "",
+    "precio": 0
+  }
+]

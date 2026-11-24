@@ -1,82 +1,110 @@
 import { unstable_rethrow } from 'next/navigation'
 import type { Product } from '@/types'
 import { categories } from '@/data/categories'
+import siteConfig from '@/config/site'
+import catalogo from '@/data/catalogo.json'
+import fotos from '@/data/fotos.json'
+import { getPhotoOverrides, type PhotoOverrides } from '@/services/productPhotos'
 import {
   ContabiliumService,
   isContabiliumConfigured,
   type ContabiliumConcepto,
-  type ContabiliumRubro,
 } from '@/services/contabilium'
 
 const DEFAULT_CATEGORY = 'accesorios'
 
+/** Un producto de la planilla (src/data/catalogo.json, generado con scripts/importar-catalogo.py) */
+interface CatalogItem {
+  sku: string
+  nombre: string
+  rubro: string
+  marca: string
+  codigoProveedor: string
+  descripcion: string
+  precio: number
+}
+
+const catalog = catalogo as CatalogItem[]
+const photos = fotos as Record<string, string>
+
 /**
- * Catálogo completo desde Contabilium: cada artículo activo es un producto de la tienda.
- * - Nombre, código, descripción y precio final (con IVA) salen de Contabilium.
- *   El stock no se publica: solo se usa para elegir los destacados del inicio.
- * - La categoría sale del rubro de Contabilium si coincide con una de la web
- *   (ej. "Frenos" -> frenos); si no (ej. rubro "General"), de palabras del nombre
- *   (ej. "CANASTA DE EMBRAGUE" -> embrague). Si nada coincide va a Accesorios.
- * - Se omiten los artículos inactivos y los servicios.
- * Si Contabilium no está configurado o no responde, la tienda queda vacía.
+ * Catálogo de la tienda: los productos, códigos y precios salen de la planilla de Excel
+ * (src/data/catalogo.json). Para actualizarlos: python3 scripts/importar-catalogo.py <planilla.xlsx>
+ * - Precio 0 en la planilla = "Consultar precio". Con siteConfig.showPrices en false no se muestra ninguno.
+ * - Contabilium sigue vinculado: si está configurado, cada producto se cruza por SKU
+ *   (o por código de fabricante, ignorando guiones: 18P116510000 = 18P-11651-00-00)
+ *   y de ahí se toman el stock (para elegir los destacados del inicio, no se publica) y la
+ *   descripción si la planilla no trae. Si Contabilium no responde, la tienda igual funciona.
+ * - La categoría sale del rubro si coincide con una de la web; si no (ej. "Repuesto"), de
+ *   palabras del nombre (ej. "CANASTA DE EMBRAGUE" -> embrague). Si nada coincide va a Accesorios.
  */
 export async function getLiveProducts(): Promise<Product[]> {
-  if (!isContabiliumConfigured()) {
-    console.warn('[Contabilium] Faltan CONTABILIUM_CLIENT_ID / CONTABILIUM_CLIENT_SECRET: la tienda no tiene productos.')
-    return []
+  const [byCode, overrides] = await Promise.all([getContabiliumByCode(), getPhotoOverrides()])
+  const usedSlugs = new Set<string>()
+  const products = catalog.map((item) => {
+    const c = byCode.get(codeKey(item.sku)) ?? (item.codigoProveedor ? byCode.get(codeKey(item.codigoProveedor)) : undefined)
+    return toProduct(item, c, uniqueSlug(item, usedSlugs), overrides)
+  })
+  // Sin datos de stock (Contabilium caído o sin cruces) se destacan los que tienen foto
+  if (!products.some((p) => p.featured)) {
+    for (const p of products) p.featured = p.image !== undefined
   }
-
-  try {
-    const [conceptos, rubros] = await Promise.all([
-      ContabiliumService.getConceptos(),
-      // Sin rubros igual se muestran los productos, todos en Accesorios
-      ContabiliumService.getRubros().catch((): ContabiliumRubro[] => []),
-    ])
-    const rubroById = new Map(rubros.map((r) => [String(r.Id), r.Nombre]))
-    const usedSlugs = new Set<string>()
-
-    return conceptos.filter(isSellable).map((c) => {
-      const rubro = c.IdRubro != null ? rubroById.get(String(c.IdRubro)) : undefined
-      return toProduct(c, rubro, uniqueSlug(c, usedSlugs))
-    })
-  } catch (err) {
-    // Las señales internas de Next.js (ej. render dinámico) no son errores de Contabilium
-    unstable_rethrow(err)
-    console.error('[Contabilium] No se pudo leer el catálogo:', err instanceof Error ? err.message : err)
-    return []
-  }
+  return products
 }
 
 export async function getLiveBySlug(slug: string): Promise<Product | undefined> {
   return (await getLiveProducts()).find((p) => p.slug === slug)
 }
 
-function isSellable(c: ContabiliumConcepto): boolean {
-  if (!c.Nombre?.trim()) return false
-  if (String(c.Estado ?? 'A').toUpperCase().startsWith('I')) return false
-  return !String(c.Tipo ?? 'Producto').toUpperCase().startsWith('S')
+// Los códigos se comparan sin guiones, espacios ni mayúsculas/minúsculas
+function codeKey(code: string | null | undefined): string {
+  return (code ?? '').toUpperCase().replace(/[^A-Z0-9]/g, '')
 }
 
-function toProduct(c: ContabiliumConcepto, rubro: string | undefined, slug: string): Product {
-  const specs: Record<string, string> = {}
-  if (rubro && slugify(rubro) !== 'general') specs['Rubro'] = rubro
-  if (c.CodigoBarras) specs['Código de barras'] = c.CodigoBarras
+async function getContabiliumByCode(): Promise<Map<string, ContabiliumConcepto>> {
+  const byCode = new Map<string, ContabiliumConcepto>()
+  if (!isContabiliumConfigured()) return byCode
+  try {
+    for (const c of await ContabiliumService.getConceptos()) {
+      const key = codeKey(c.Codigo)
+      if (key) byCode.set(key, c)
+    }
+  } catch (err) {
+    // Las señales internas de Next.js (ej. render dinámico) no son errores de Contabilium
+    unstable_rethrow(err)
+    console.error('[Contabilium] No se pudo leer el stock:', err instanceof Error ? err.message : err)
+  }
+  return byCode
+}
 
-  const category = matchCategory(rubro) ?? categoryFromName(c.Nombre)
+// Foto: la elegida en el panel /admin/fotos (null = quitada) y si no, la del repo
+function photoFor(sku: string, overrides: PhotoOverrides): string | undefined {
+  return sku in overrides ? (overrides[sku] ?? undefined) : photos[sku]
+}
+
+function toProduct(item: CatalogItem, c: ContabiliumConcepto | undefined, slug: string, overrides: PhotoOverrides): Product {
+  const specs: Record<string, string> = {}
+  if (item.marca) specs['Marca'] = item.marca
+  if (item.codigoProveedor) specs['Código de fabricante'] = item.codigoProveedor
+  if (c?.CodigoBarras) specs['Código de barras'] = c.CodigoBarras
+
+  const category = matchCategory(item.rubro) ?? categoryFromName(item.nombre)
+  const description =
+    item.descripcion || (c?.Descripcion || c?.Observaciones || '').trim() || defaultDescription(category, item.sku)
 
   return {
-    id: `ctb-${c.Id}`,
-    name: c.Nombre.trim(),
+    id: `mbt-${item.sku}`,
+    name: item.nombre,
     slug,
-    sku: (c.Codigo ?? '').trim(),
+    sku: item.sku,
     category,
     vehicles: [],
-    // Precio 0 en Contabilium = sin precio cargado: se muestra "Consultar precio"
-    price: c.PrecioFinal > 0 ? c.PrecioFinal : undefined,
-    description: (c.Descripcion || c.Observaciones || '').trim() || defaultDescription(category, c.Codigo),
+    price: siteConfig.showPrices && item.precio > 0 ? item.precio : undefined,
+    image: photoFor(item.sku, overrides),
+    description,
     specs: Object.keys(specs).length ? specs : undefined,
-    featured: (c.Stock ?? 0) > 0,
-    tags: rubro ? [rubro] : [],
+    featured: (c?.Stock ?? 0) > 0,
+    tags: [item.rubro, item.marca].filter(Boolean),
   }
 }
 
@@ -109,7 +137,7 @@ const NAME_KEYWORDS: [string, RegExp][] = [
   ['transmision', /caja|engranaje|horquilla|shift|fork|axle|eje|pinon|carrier|cadena|palier|trambalador|pawl/],
   ['neumaticos', /neumatico|cubierta|tire/],
   ['ruedas', /rueda|llanta|wheel/],
-  ['proteccion', /protector|guard|cubre/],
+  ['proteccion', /protector|guard|cubre|casco|guante|pechera|rodillera|antiparra|cuello/],
   ['motor', /cilindro|piston|biela|ciguenal|valvula|valve|aros|leva|junta|gasket|o-ring|seal|bomba|aceite|magneto|stator|bujia|rulem|bearing|balanceador|tensor|distribucion|crank|cam|impeller|botador|electro|bendix|brush/],
 ]
 
@@ -119,10 +147,9 @@ function categoryFromName(name: string): string {
 }
 
 // La dirección del producto se arma con el nombre; si dos se llaman igual, se agrega el código.
-function uniqueSlug(c: ContabiliumConcepto, used: Set<string>): string {
-  let slug = slugify(c.Nombre) || `producto-${c.Id}`
-  if (used.has(slug)) slug = `${slug}-${slugify(c.Codigo || String(c.Id))}`
-  if (used.has(slug)) slug = `${slug}-${c.Id}`
+function uniqueSlug(item: CatalogItem, used: Set<string>): string {
+  let slug = slugify(item.nombre) || `producto-${slugify(item.sku)}`
+  if (used.has(slug)) slug = `${slug}-${slugify(item.sku)}`
   used.add(slug)
   return slug
 }

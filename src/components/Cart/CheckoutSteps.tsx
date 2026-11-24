@@ -87,7 +87,7 @@ export function CheckoutDetails({ onSent }: { onSent: (waUrl: string) => void })
           <span className="text-sm text-zinc-400">
             {totalItems} producto{totalItems !== 1 ? 's' : ''}
           </span>
-          <span className="text-xl font-black text-white">{formatPrice(subtotal)}</span>
+          {subtotal > 0 && <span className="text-xl font-black text-white">{formatPrice(subtotal)}</span>}
         </div>
         <button
           type="submit"

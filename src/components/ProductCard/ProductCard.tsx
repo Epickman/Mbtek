@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import ProductImage from './ProductImage'
 import ProductActions from './ProductActions'
 import { formatPrice } from '@/utils/formatPrice'
 import { getCategoryById } from '@/data/categories'
@@ -27,6 +28,8 @@ export default function ProductCard({ product, className, size = 'default' }: Pr
       )}
     >
       <Link href={`/productos/${product.slug}`} className="flex flex-1 flex-col" aria-label={`Ver ${product.name}`}>
+        <ProductImage product={product} sizes={small ? '(min-width: 640px) 200px, 50vw' : '(min-width: 1024px) 300px, (min-width: 640px) 45vw, 100vw'} />
+
         {/* Info */}
         <div className={cn('flex flex-col flex-1', small ? 'p-3 gap-1' : 'p-4 gap-2')}>
           {category && (
@@ -63,11 +66,13 @@ export default function ProductCard({ product, className, size = 'default' }: Pr
             </p>
           )}
 
-          <div className={cn('flex items-center justify-between mt-auto', small ? 'pt-2' : 'pt-3')}>
-            <span className={cn('text-white font-bold', small ? 'text-base' : 'text-xl')}>
-              {formatPrice(product.price)}
-            </span>
-          </div>
+          {product.price != null && (
+            <div className={cn('flex items-center justify-between mt-auto', small ? 'pt-2' : 'pt-3')}>
+              <span className={cn('text-white font-bold', small ? 'text-base' : 'text-xl')}>
+                {formatPrice(product.price)}
+              </span>
+            </div>
+          )}
         </div>
       </Link>
 

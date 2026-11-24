@@ -267,7 +267,9 @@ function Customizer({ type }: { type: DiagramType }) {
                             >
                               {item.product.name}
                             </Link>
-                            <p className="mt-0.5 text-xs text-zinc-400">{formatPrice(item.product.price)}</p>
+                            {item.product.price != null && (
+                              <p className="mt-0.5 text-xs text-zinc-400">{formatPrice(item.product.price)}</p>
+                            )}
                           </div>
                           <div className="flex items-center rounded-full border border-zinc-700">
                             <button
@@ -325,9 +327,9 @@ function Customizer({ type }: { type: DiagramType }) {
                               >
                                 {product.name}
                               </Link>
-                              <p className="mt-0.5 text-xs text-zinc-400">
-                                {formatPrice(product.price)}
-                              </p>
+                              {product.price != null && (
+                                <p className="mt-0.5 text-xs text-zinc-400">{formatPrice(product.price)}</p>
+                              )}
                             </div>
                             <button
                               onClick={() => {

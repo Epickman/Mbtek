@@ -22,6 +22,8 @@ export interface Product {
   subcategory?: string
   vehicles: string[] // e.g. ['yamaha-raptor-700', 'yamaha-yfz450r']
   price?: number
+  /** Foto del producto (public/images/productos-mbtek/<SKU>.webp, ver scripts/producir-fotos.mjs) */
+  image?: string
   description: string
   specs?: Record<string, string>
   featured?: boolean

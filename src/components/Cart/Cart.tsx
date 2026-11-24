@@ -179,11 +179,9 @@ export default function Cart() {
 
                     {/* Price */}
                     <div className="text-right">
-                      <p className="text-sm font-bold text-white">
-                        {item.product.price != null
-                          ? formatPrice(item.product.price * item.quantity)
-                          : formatPrice(null)}
-                      </p>
+                      {item.product.price != null && (
+                        <p className="text-sm font-bold text-white">{formatPrice(item.product.price * item.quantity)}</p>
+                      )}
                       {item.product.price != null && item.quantity > 1 && (
                         <p className="text-[0.6875rem] text-zinc-500">{formatPrice(item.product.price)} c/u</p>
                       )}
@@ -199,11 +197,13 @@ export default function Cart() {
         {/* Footer */}
         {state.items.length > 0 && (
           <div className="space-y-3 border-t border-zinc-800 p-4">
-            <div className="flex items-baseline justify-between px-1">
-              <span className="text-sm uppercase tracking-wide text-zinc-400">Subtotal</span>
-              <span className="text-xl font-black text-white">{formatPrice(subtotal)}</span>
-            </div>
-            {someUnpriced && (
+            {subtotal > 0 && (
+              <div className="flex items-baseline justify-between px-1">
+                <span className="text-sm uppercase tracking-wide text-zinc-400">Subtotal</span>
+                <span className="text-xl font-black text-white">{formatPrice(subtotal)}</span>
+              </div>
+            )}
+            {subtotal > 0 && someUnpriced && (
               <p className="px-1 text-xs text-zinc-500">
                 Algunos productos son a consultar y no están incluidos en el subtotal.
               </p>

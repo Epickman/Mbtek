@@ -249,6 +249,8 @@ function FilterMenu({
   }, [products])
   const used = categories.filter(c => counts.has(c.id))
   const active = (filters.category ? 1 : 0) + (filters.sort ? 1 : 0)
+  // Sin precios publicados no tiene sentido ordenar por precio
+  const hasPrices = products.some(p => p.price != null)
 
   const option = (selected: boolean) =>
     cn(
@@ -288,15 +290,19 @@ function FilterMenu({
             </button>
           ))}
 
-          <div className="my-3 border-t border-zinc-800" />
+          {hasPrices && (
+            <>
+              <div className="my-3 border-t border-zinc-800" />
 
-          <p className="px-3 pb-1.5 text-[0.625rem] uppercase tracking-[0.2em] text-zinc-500">Ordenar por precio</p>
-          {SORT_OPTIONS.map(o => (
-            <button key={o.value} onClick={() => update('sort', o.value)} className={option(filters.sort === o.value)}>
-              {o.label}
-              {filters.sort === o.value && <Check size={14} className="text-[var(--accent)]" />}
-            </button>
-          ))}
+              <p className="px-3 pb-1.5 text-[0.625rem] uppercase tracking-[0.2em] text-zinc-500">Ordenar por precio</p>
+              {SORT_OPTIONS.map(o => (
+                <button key={o.value} onClick={() => update('sort', o.value)} className={option(filters.sort === o.value)}>
+                  {o.label}
+                  {filters.sort === o.value && <Check size={14} className="text-[var(--accent)]" />}
+                </button>
+              ))}
+            </>
+          )}
         </div>
       )}
     </div>
@@ -336,7 +342,9 @@ function ProductList({ products }: { products: Product[] }) {
                       <h3 className="text-white font-semibold text-lg hover:text-[var(--accent)] transition-colors">{product.name}</h3>
                     </Link>
                   </div>
-                  <span className="text-white font-bold text-xl whitespace-nowrap flex-shrink-0">{formatPrice(product.price)}</span>
+                  {product.price != null && (
+                    <span className="text-white font-bold text-xl whitespace-nowrap flex-shrink-0">{formatPrice(product.price)}</span>
+                  )}
                 </div>
                 <p className="text-zinc-500 text-sm mt-1 line-clamp-2">{product.description}</p>
               </div>

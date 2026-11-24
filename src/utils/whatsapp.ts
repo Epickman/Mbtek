@@ -6,7 +6,7 @@ import { formatPrice } from '@/utils/formatPrice'
 // Use this function everywhere — never hardcode messages or numbers
 
 function priceLines(product: Product, quantity: number, indent = ''): string {
-  if (product.price == null) return `${indent}Precio: a consultar`
+  if (product.price == null) return ''
   const unit = `${indent}Precio: ${formatPrice(product.price)}`
   return quantity > 1 ? `${unit} c/u\n${indent}Subtotal: ${formatPrice(product.price * quantity)}` : unit
 }
@@ -47,8 +47,10 @@ export function generateWhatsAppOrder(params: WhatsAppOrderParams): string {
     const itemLines = items
       .map(
         (item, i) =>
-          `${i + 1}. ${item.product.name}\n   SKU: ${item.product.sku}\n   Cantidad: ${item.quantity}\n` +
-          priceLines(item.product, item.quantity, '   ')
+          (
+            `${i + 1}. ${item.product.name}\n   SKU: ${item.product.sku}\n   Cantidad: ${item.quantity}\n` +
+            priceLines(item.product, item.quantity, '   ')
+          ).trimEnd()
       )
       .join('\n\n')
 

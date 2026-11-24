@@ -99,7 +99,7 @@ export default function ProductDetailClient({ product }: Props) {
           <div className="flex items-center gap-3">
             <div className="min-w-0 flex-1">
               <p className="truncate text-xs text-zinc-400">{product.name}</p>
-              <p className="font-black text-white">{formatPrice(product.price)}</p>
+              {product.price != null && <p className="font-black text-white">{formatPrice(product.price)}</p>}
             </div>
             <button
               onClick={add}
