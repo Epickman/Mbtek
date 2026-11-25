@@ -11,8 +11,8 @@
  *       Las fotos propias pisan a las bajadas.
  *
  * Cada foto se ajusta a un cuadrado de 1000 px con fondo blanco y se guarda en webp
- * (original en public/images/productos/). La tienda usa la versión "producida" con fondo de
- * carbono y logo MBTEK (public/images/productos-mbtek/, ver src/lib/photoStudio.mjs).
+ * (original en public/images/productos/). La tienda usa la versión sin fondo (transparente)
+ * de public/images/productos-mbtek/ (ver scripts/quitar-fondo.py y src/lib/photoStudio.mjs).
  */
 import { readFile, writeFile, readdir, mkdir, rm } from 'node:fs/promises'
 import { existsSync } from 'node:fs'

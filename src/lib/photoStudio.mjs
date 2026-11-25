@@ -1,96 +1,16 @@
 /**
- * "Estudio" de fotos de producto MBTEK: fondo de fibra de carbono con luz al centro,
- * logo arriba y el producto recortado (se quita el fondo blanco que toca los bordes)
- * con sombra. Si la foto tiene fondo propio (no blanco), va como una foto con esquinas
- * redondeadas.
+ * Fotos de producto MBTEK sin fondo: el producto recortado (se quita el fondo blanco que
+ * toca los bordes) centrado en un cuadrado transparente. Si la foto tiene fondo propio
+ * (no blanco), va como una foto con esquinas redondeadas.
+ * Para fondos que no son blancos, scripts/quitar-fondo.py usa un modelo de IA.
  *
  * Es .mjs para poder usarlo tanto desde scripts/ (node) como desde el servidor de Next.
  */
 import sharp from 'sharp'
-import path from 'node:path'
-import { readFile } from 'node:fs/promises'
 
 export const SIZE = 1000
-const LOGO_WIDTH = 540
-const LOGO_TOP = 46
-// Zona donde entra el producto (debajo del logo)
-const BOX = { left: 80, top: 225, width: 840, height: 720 }
-
-let backgroundPromise
-let logoPromise
-
-/** Fibra de carbono 2x2 twill generada por código (sin archivos extra). */
-async function makeBackground() {
-  const cell = 11
-  const data = Buffer.alloc(SIZE * SIZE * 3)
-  for (let y = 0; y < SIZE; y++) {
-    for (let x = 0; x < SIZE; x++) {
-      // La trama va girada 45° como en las fotos de carbono
-      const rx = (x + y) * Math.SQRT1_2 + 5000
-      const ry = (y - x) * Math.SQRT1_2 + 5000
-      const i = Math.floor(rx / cell)
-      const j = Math.floor(ry / cell)
-      const u = (rx % cell) / cell
-      const v = (ry % cell) / cell
-      const horizontal = (((i + j) % 4) + 4) % 4 < 2
-      // Cada hebra es un "cilindro": más clara al centro, oscura en los bordes
-      const across = horizontal ? v : u
-      const along = horizontal ? u : v
-      const tow = Math.pow(Math.sin(Math.PI * across), 1.6)
-      const ripple = 0.85 + 0.15 * Math.sin(Math.PI * along)
-      const b = horizontal ? 14 + 40 * tow * ripple : 10 + 20 * tow * ripple
-      const o = (y * SIZE + x) * 3
-      data[o] = b * 0.9
-      data[o + 1] = b * 1.0
-      data[o + 2] = b * 1.04
-    }
-  }
-  const light = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${SIZE}" height="${SIZE}">
-    <defs>
-      <radialGradient id="spot" cx="50%" cy="58%" r="55%">
-        <stop offset="0" stop-color="#cfe3e6" stop-opacity="0.22"/>
-        <stop offset="0.55" stop-color="#cfe3e6" stop-opacity="0.07"/>
-        <stop offset="1" stop-color="#cfe3e6" stop-opacity="0"/>
-      </radialGradient>
-      <radialGradient id="vig" cx="50%" cy="52%" r="72%">
-        <stop offset="0.45" stop-color="#000" stop-opacity="0"/>
-        <stop offset="1" stop-color="#000" stop-opacity="0.85"/>
-      </radialGradient>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#spot)"/>
-    <rect width="100%" height="100%" fill="url(#vig)"/>
-  </svg>`)
-  return sharp(data, { raw: { width: SIZE, height: SIZE, channels: 3 } })
-    .composite([{ input: light }])
-    .png()
-    .toBuffer()
-}
-
-async function getBackground() {
-  backgroundPromise ??= makeBackground()
-  return backgroundPromise
-}
-
-async function getLogo() {
-  logoPromise ??= (async () => {
-    const file = path.join(process.cwd(), 'public/brand/mbtek-logo.png')
-    const logo = await sharp(await readFile(file)).resize({ width: LOGO_WIDTH }).png().toBuffer()
-    const { width, height } = await sharp(logo).metadata()
-    const shadow = await sharp(logo)
-      .ensureAlpha()
-      .extractChannel('alpha')
-      .toColourspace('b-w')
-      .toBuffer()
-      .then((a) =>
-        sharp({ create: { width, height, channels: 3, background: '#000' } })
-          .joinChannel(a)
-          .png()
-          .toBuffer(),
-      )
-    return { logo, shadow, width, height }
-  })()
-  return logoPromise
-}
+// Margen transparente alrededor del producto
+const MARGIN = 40
 
 const isWhite = (r, g, b) => Math.min(r, g, b) >= 236 && Math.max(r, g, b) - Math.min(r, g, b) <= 20
 const isPureWhite = (r, g, b) => Math.min(r, g, b) >= 247 && Math.max(r, g, b) - Math.min(r, g, b) <= 8
@@ -219,55 +139,24 @@ async function cutout(input) {
   return { img, isPhoto }
 }
 
-/** Arma la foto final de 1000x1000 en webp. */
+/** Arma la foto final de 1000x1000 en webp, con el producto recortado sobre fondo transparente. */
 export async function producePhoto(input) {
-  const [{ img, isPhoto }, background, logo] = await Promise.all([cutout(input), getBackground(), getLogo()])
-
-  const maxW = isPhoto ? BOX.width - 60 : BOX.width
-  const maxH = isPhoto ? BOX.height - 50 : BOX.height
-  let product = await sharp(img).resize(maxW, maxH, { fit: 'inside' }).png().toBuffer()
+  const { img, isPhoto } = await cutout(input)
+  const max = SIZE - 2 * MARGIN
+  let product = await sharp(img).resize(max, max, { fit: 'inside' }).png().toBuffer()
   const { width: pw, height: ph } = await sharp(product).metadata()
 
+  // Foto con fondo propio (no blanco): no se puede recortar acá, va con esquinas redondeadas
   if (isPhoto) {
     const r = 18
     const round = Buffer.from(
       `<svg xmlns="http://www.w3.org/2000/svg" width="${pw}" height="${ph}"><rect width="${pw}" height="${ph}" rx="${r}" ry="${r}" fill="#fff"/></svg>`,
     )
-    const border = Buffer.from(
-      `<svg xmlns="http://www.w3.org/2000/svg" width="${pw}" height="${ph}"><rect x="1" y="1" width="${pw - 2}" height="${ph - 2}" rx="${r}" ry="${r}" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="2"/></svg>`,
-    )
-    product = await sharp(product)
-      .composite([{ input: round, blend: 'dest-in' }, { input: border }])
-      .png()
-      .toBuffer()
+    product = await sharp(product).composite([{ input: round, blend: 'dest-in' }]).png().toBuffer()
   }
 
-  const left = Math.round(BOX.left + (BOX.width - pw) / 2)
-  const top = Math.round(BOX.top + (BOX.height - ph) / 2)
-
-  // Sombra: la silueta del producto en negro, desenfocada y corrida hacia abajo
-  const pad = 60
-  const silhouette = await sharp(product).extractChannel('alpha').toBuffer()
-  const shadow = await sharp({ create: { width: pw, height: ph, channels: 3, background: '#000' } })
-    .joinChannel(silhouette)
-    .extend({ top: pad, bottom: pad, left: pad, right: pad, background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .blur(isPhoto ? 22 : 16)
-    .ensureAlpha(0)
-    .png()
-    .toBuffer()
-  const shadowFaded = await sharp(shadow)
-    .composite([{ input: Buffer.from([0, 0, 0, 190]), raw: { width: 1, height: 1, channels: 4 }, tile: true, blend: 'dest-in' }])
-    .png()
-    .toBuffer()
-
-  const logoLeft = Math.round((SIZE - logo.width) / 2)
-  return sharp(background)
-    .composite([
-      { input: logo.shadow, left: logoLeft + 4, top: LOGO_TOP + 6, blend: 'multiply' },
-      { input: logo.logo, left: logoLeft, top: LOGO_TOP },
-      { input: shadowFaded, left: left - pad, top: top - pad + (isPhoto ? 16 : 22) },
-      { input: product, left, top },
-    ])
-    .webp({ quality: 84 })
+  return sharp({ create: { width: SIZE, height: SIZE, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
+    .composite([{ input: product, left: Math.round((SIZE - pw) / 2), top: Math.round((SIZE - ph) / 2) }])
+    .webp({ quality: 88, alphaQuality: 100 })
     .toBuffer()
 }

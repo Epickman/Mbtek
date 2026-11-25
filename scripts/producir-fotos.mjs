@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Rehace las fotos "producidas" (fondo de carbono + logo MBTEK) a partir de los originales
+ * Rehace las fotos "producidas" (sin fondo, transparentes) a partir de los originales
  * en public/images/productos/ y apunta src/data/fotos.json a public/images/productos-mbtek/.
  *
  * Uso:

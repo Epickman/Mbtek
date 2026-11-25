@@ -10,7 +10,8 @@
  * producto y al final "Descargar selección" (baja fotos-elegidas.json a Descargas).
  * Después: node scripts/importar-fotos.mjs --seleccion ~/Downloads/fotos-elegidas.json
  *
- * Búsqueda: repuestos Yamaha por número de parte; el resto por marca + nombre + modelo.
+ * Búsqueda: primero por código de proveedor (Yamaha con formato de número de parte),
+ * después por marca + nombre como respaldo. Muestra primero las fotos encontradas por código.
  */
 import { readFile, writeFile, mkdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
@@ -34,11 +35,21 @@ function yamahaCode(code) {
   return c.length === 12 ? `${c.slice(0, 3)}-${c.slice(3, 8)}-${c.slice(8, 10)}-${c.slice(10)}` : c
 }
 
-function query(p) {
-  if (p.marca === 'Yamaha' && /\d/.test(p.codigoProveedor)) return `yamaha ${yamahaCode(p.codigoProveedor)}`
+// Código del proveedor limpio ("Código 520KXZx120GB-CL" -> "520KXZx120GB-CL"); '' si no tiene números
+function codigo(p) {
+  const c = (p.codigoProveedor ?? '').replace(/^c[oó]digo:?\s*/i, '').trim()
+  return /\d/.test(c) ? c : ''
+}
+
+// Búsquedas en orden de prioridad: primero por código (número de parte), después por nombre.
+function queries(p) {
+  const cod = codigo(p)
   const name = p.nombre.replace(new RegExp(p.marca.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'ig'), '').trim()
-  const code = p.codigoProveedor && !name.toUpperCase().includes(p.codigoProveedor.toUpperCase()) ? ` ${p.codigoProveedor}` : ''
-  return `${p.marca} ${name}${code}`.replace(/\s+/g, ' ').trim()
+  const out = []
+  if (cod) out.push(p.marca === 'Yamaha' ? `yamaha ${yamahaCode(cod)}` : `${p.marca} ${cod}`)
+  const porNombre = `${p.marca} ${name}${cod && !name.toUpperCase().includes(cod.toUpperCase()) ? ` ${cod}` : ''}`
+  out.push(porNombre.replace(/\s+/g, ' ').trim())
+  return [...new Set(out)]
 }
 
 async function search(q) {
@@ -55,16 +66,20 @@ await mkdir(outDir, { recursive: true })
 const results = []
 const pending = catalogo.filter((p) => todos || !fotos[p.sku])
 for (const [i, p] of pending.entries()) {
-  const q = query(p)
+  const qs = queries(p)
+  const q = qs[0]
   let candidatos = []
-  try {
-    candidatos = await search(q)
-  } catch (err) {
-    console.error(`  ${p.sku}: error buscando (${err.message})`)
+  for (const qq of qs) {
+    try {
+      candidatos.push(...(await search(qq)))
+    } catch (err) {
+      console.error(`  ${p.sku}: error buscando "${qq}" (${err.message})`)
+    }
+    await sleep(700)
   }
+  candidatos = [...new Set(candidatos)].slice(0, PER_PRODUCT * 2)
   results.push({ sku: p.sku, nombre: p.nombre, marca: p.marca, codigo: p.codigoProveedor, q, candidatos })
   process.stdout.write(`\r${i + 1}/${pending.length} ${p.nombre.slice(0, 40).padEnd(40)}`)
-  await sleep(700)
 }
 console.log()
 

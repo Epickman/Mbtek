@@ -55,7 +55,7 @@ export const getPhotoOverrides = cache(async (): Promise<PhotoOverrides> => {
   }
 })
 
-/** Cuadrado de 1000 px con fondo de carbono y logo MBTEK, webp (igual que scripts/importar-fotos.mjs). */
+/** Cuadrado de 1000 px sin fondo (transparente), webp (igual que scripts/importar-fotos.mjs). */
 async function normalize(input: Buffer): Promise<Buffer> {
   try {
     const white = await sharp(input, { failOn: 'none' })
