@@ -9,10 +9,10 @@ interface ProductImageProps {
   preload?: boolean
 }
 
-/** Foto cuadrada del producto; sin foto, un recuadro con el logo de MBTEK. */
+/** Foto cuadrada del producto sobre fondo blanco; sin foto, un recuadro con el logo de MBTEK. */
 export default function ProductImage({ product, sizes, className, preload }: ProductImageProps) {
   return (
-    <div className={cn('relative aspect-square w-full overflow-hidden', product.image ? 'bg-zinc-950' : 'bg-zinc-800/60', className)}>
+    <div className={cn('relative aspect-square w-full overflow-hidden', product.image ? 'bg-white' : 'bg-zinc-800/60', className)}>
       {product.image ? (
         <Image
           src={product.image}
