@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
-const FRAME_COUNT = 112
+const FRAME_COUNT = 99
 const frameUrl = (i: number) => `/hero/frames/frame_${String(i + 1).padStart(4, '0')}.jpg`
 
 // Fracción del scroll del hero en la que el logo se desvanece y aparece el video.
